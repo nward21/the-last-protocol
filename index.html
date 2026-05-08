@@ -1486,6 +1486,353 @@
   }
   .anchor-cap strong { color: var(--text-soft); }
 
+  /* ─── PART DIVIDERS (long-form structure) ────────────── */
+  .part-divider {
+    text-align: center;
+    margin: 96px auto 64px;
+    padding: 56px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    max-width: 760px;
+  }
+  .part-divider::before,
+  .part-divider::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: var(--c-value);
+  }
+  .part-divider::before { top: -1px; }
+  .part-divider::after { bottom: -1px; }
+  .part-eyebrow {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--c-value);
+    margin-bottom: 14px;
+    font-weight: 700;
+    text-shadow: 0 0 12px rgba(255,107,26,0.4);
+  }
+  .part-h {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    line-height: 1.05;
+    color: var(--text);
+  }
+  .part-sub {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  @media (max-width: 640px) {
+    .part-h { font-size: 32px; }
+    .part-sub { font-size: 14.5px; }
+    .part-divider { margin: 64px auto 48px; padding: 36px 0; }
+  }
+
+  /* ─── PROSE BLOCK (long-form prose) ──────────────────── */
+  .prose {
+    font-size: 16.5px;
+    line-height: 1.75;
+    color: var(--text-soft);
+    max-width: 720px;
+    margin-bottom: 24px;
+  }
+  .prose p { margin: 0 0 20px; }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose strong { color: var(--text); font-weight: 600; }
+  .prose em { color: var(--c-value); font-style: italic; font-weight: 500; }
+  .prose .lead {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 640px) {
+    .prose { font-size: 15.5px; }
+    .prose .lead { font-size: 17px; }
+  }
+
+  /* ─── LARGE PULL QUOTE ───────────────────────────────── */
+  .pull-quote-lg {
+    margin: 56px auto;
+    padding: 44px 28px;
+    border-top: 1px solid var(--c-value);
+    border-bottom: 1px solid var(--c-value);
+    background: linear-gradient(180deg, transparent 0%, var(--c-value-soft) 50%, transparent 100%);
+    text-align: center;
+    position: relative;
+    max-width: 880px;
+  }
+  .pull-quote-lg q {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    display: block;
+    max-width: 720px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+  .pull-quote-lg q::before, .pull-quote-lg q::after {
+    color: var(--c-value);
+    font-size: 1.2em;
+    text-shadow: 0 0 10px rgba(255,107,26,0.5);
+  }
+  .pull-quote-lg cite {
+    display: block;
+    font-style: normal;
+    margin-top: 18px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-value);
+    font-weight: 700;
+  }
+  @media (max-width: 640px) {
+    .pull-quote-lg q { font-size: 22px; }
+    .pull-quote-lg { padding: 32px 20px; }
+  }
+
+  /* ─── SIDENOTE / IN-LINE CALLOUT ─────────────────────── */
+  .sidenote {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--c-value);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 20px 24px;
+    margin: 28px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-soft);
+    max-width: 720px;
+  }
+  .sidenote-label {
+    display: inline-block;
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-value);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .sidenote strong { color: var(--text); }
+
+  /* ─── TRINITY (Three-In-One) ─────────────────────────── */
+  .trinity-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  @media (min-width: 760px) { .trinity-grid { grid-template-columns: repeat(3, 1fr); } }
+  .trinity-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--c-value);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .trinity-card:hover { transform: translateY(-2px); border-color: var(--c-value); }
+  .trinity-card .num {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-value);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .trinity-card h4 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    line-height: 1.2;
+  }
+  .trinity-card .tag {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .trinity-card p {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text-soft);
+    margin: 0;
+  }
+
+  /* ─── ACTIVE TREASURY COMPARE TABLE ──────────────────── */
+  .treasury-compare {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 32px 0;
+  }
+  .tc-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .tc-row:last-child { border-bottom: none; }
+  .tc-row > div {
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .tc-row.head { background: var(--panel-2); }
+  .tc-row.head > div {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+  .tc-row.head > div:first-child { color: var(--muted); }
+  .tc-row.head > div.passive { color: var(--c-closed); }
+  .tc-row.head > div.active { color: var(--c-value); }
+  .tc-row > div:first-child {
+    background: var(--panel-2);
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+  }
+  .tc-row > div.cell-passive { border-right: 1px solid var(--border); }
+  .tc-row > div strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 720px) {
+    .tc-row { grid-template-columns: 1fr; }
+    .tc-row > div { border-right: none !important; border-bottom: 1px solid var(--border); }
+    .tc-row > div:last-child { border-bottom: none; }
+    .tc-row.head { display: none; }
+    .tc-row > div:first-child { background: var(--panel-3); }
+  }
+
+  /* ─── KEY CARDS (Three Keys) ─────────────────────────── */
+  .keys-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin: 32px 0;
+  }
+  .key-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--c-value);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .key-card::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--c-value-soft) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .key-card > * { position: relative; z-index: 1; }
+  .key-eyebrow {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.20em;
+    color: var(--c-value);
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-shadow: 0 0 10px rgba(255,107,26,0.4);
+  }
+  .key-h {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    line-height: 1.15;
+  }
+  @media (max-width: 640px) {
+    .key-card { padding: 28px 22px; }
+    .key-h { font-size: 22px; }
+  }
+
+  /* ─── VACUUM CALLOUT (Architect chapter) ─────────────── */
+  .vacuum-callout {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--c-value-soft) 100%);
+    border: 1px solid var(--c-value);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    margin: 32px 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 24px rgba(255,107,26,0.1);
+  }
+  .vacuum-callout h4 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    color: var(--c-value);
+    letter-spacing: -0.01em;
+  }
+  .vacuum-callout p {
+    color: var(--text-soft);
+    font-size: 15.5px;
+    line-height: 1.65;
+    margin: 0;
+  }
+  .vacuum-callout p strong { color: var(--text); font-weight: 600; }
+
+  /* ─── ARCHETYPE STACK (3 commentator types) ──────────── */
+  .archetype-list {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+    display: grid;
+    gap: 12px;
+  }
+  .archetype-list li {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text-soft);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .archetype-list b {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--c-closed);
+    font-weight: 700;
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+
   /* ─── NODE vs SPECTATOR (closing visual) ───────────────── */
   .nvs {
     display: grid;
@@ -1636,6 +1983,13 @@
     </div>
   </section>
 
+  <!-- ─── PART I DIVIDER ─────────────────────────────────── -->
+  <div class="part-divider">
+    <div class="part-eyebrow">Part I · The Networks</div>
+    <h2 class="part-h">A Brief History of Civilizational Leaps</h2>
+    <p class="part-sub">Five technologies. Five vertical jumps. Each one created a new layer of human civilization. Bitcoin is the fifth — and the first one ever pointed at the balance sheet.</p>
+  </div>
+
   <!-- ─── SECTION I · THE LEAP ───────────────────────────── -->
   <section class="section">
     <div class="sec-head">
@@ -1784,6 +2138,18 @@
         <p class="topo-cap">Every node verifies. No node is necessary. Cut any one — the network keeps moving. <strong>Trust the math instead of the keeper.</strong></p>
       </div>
     </div>
+
+    <div class="prose" style="margin: 36px 0;">
+      <p>This isn't theory. It is recent history.</p>
+      <p>In 1989, the smart money was on closed networks. <strong>AOL, CompuServe, and Prodigy</strong> each ran walled gardens with their own content, their own messaging systems, their own internal currencies. Each had millions of paying subscribers. Each had a "moat" the consultants of the day called unbreakable. None of them survived TCP/IP's arrival.</p>
+      <p>The lesson was not that closed networks were <em>bad</em>. It was that they were <strong>uncompetitive</strong>. Every dollar a startup spent inside AOL was a dollar AOL could tax, deny, or redirect. Every dollar spent on the open internet — using TCP/IP, HTTP, SMTP — went directly to the destination. The closed network's "moat" became a liability the moment the open alternative was good enough. Once developers, customers, and capital flipped, they didn't flip back.</p>
+      <p>Banking is the AOL of finance. SWIFT is the CompuServe of value transfer. The walls are still up. The subscribers are still paying. The moats look unbreakable. They are not. The open alternative is now good enough — and the same network effects that hollowed out AOL between 1995 and 2000 are starting to hollow out the global payments stack between 2024 and 2030.</p>
+    </div>
+
+    <blockquote class="pull-quote-lg">
+      <q>The closed network's moat becomes a liability the moment the open alternative is good enough.</q>
+      <cite>The Open Protocol Lesson · 1995–2000 · 2024–2030</cite>
+    </blockquote>
 
     <div class="equiv">
       <div class="equiv-grid">
@@ -1968,6 +2334,13 @@
       </div>
     </div>
   </section>
+
+  <!-- ─── PART II DIVIDER ────────────────────────────────── -->
+  <div class="part-divider">
+    <div class="part-eyebrow">Part II · The Architecture</div>
+    <h2 class="part-h">How Open Protocols Eat Closed Networks</h2>
+    <p class="part-sub">From walled gardens to neutral rails. Why the same pattern that broke AOL is now breaking SWIFT — and what the new layered stack looks like underneath.</p>
+  </div>
 
   <!-- ─── SECTION III · THE STACK ────────────────────────── -->
   <section class="section">
@@ -2262,6 +2635,13 @@
     </div>
   </section>
 
+  <!-- ─── PART III DIVIDER ───────────────────────────────── -->
+  <div class="part-divider">
+    <div class="part-eyebrow">Part III · The Evidence</div>
+    <h2 class="part-h">The Math Underneath the Argument</h2>
+    <p class="part-sub">Charts, source documents, and the original problem statement. Why this isn't a hot take — it's a structural read of how networks scale and where value accrues.</p>
+  </div>
+
   <!-- ─── SECTION VII · NEUTRALITY CHARTS ────────────────── -->
   <section class="section">
     <div class="sec-head">
@@ -2412,10 +2792,274 @@
     </blockquote>
   </section>
 
+  <!-- ─── PART IV DIVIDER ────────────────────────────────── -->
+  <div class="part-divider">
+    <div class="part-eyebrow">Part IV · The Corporation</div>
+    <h2 class="part-h">From Reserve to Operating System</h2>
+    <p class="part-sub">The first wave was about whether to hold Bitcoin. The next wave is about whether to run on it. Five chapters on the corporate architecture of the protocol era.</p>
+  </div>
+
+  <!-- ─── SECTION IX · THE THREE-IN-ONE ──────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M12 9v3M9 14l-1.5 2M15 14l1.5 2"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">IX</span>The Three-In-One</div>
+    </div>
+    <h2 class="section-h2">Asset. Network. Protocol.</h2>
+    <p class="section-lead">Three things at once. None of them work without the other two.</p>
+
+    <div class="prose">
+      <p class="lead">For most of Bitcoin's first decade, the conversation was stuck in a single frame: <em>is it real money?</em> Treasurers asked it, regulators asked it, founders asked it. The question is the wrong size.</p>
+      <p>Bitcoin is not one thing. It is three things simultaneously, and the corporation that learns to use all three is operating on a different plane than the corporation that learns to use one. Each layer is a different kind of leverage. Each layer requires a different mental model. And each layer compounds the value of the others — which means the gap between a company that sees one layer and a company that sees three is not linear. It is exponential.</p>
+      <p>The treasurer's first job is to recognize the layering. The corporation's first job is to decide how deep into the stack it intends to go.</p>
+    </div>
+
+    <div class="trinity-grid">
+      <div class="trinity-card">
+        <div class="num">Layer One</div>
+        <h4>The Hard Asset</h4>
+        <div class="tag">Digital Scarcity</div>
+        <p>The layer most people meet first. Twenty-one million units, mathematically capped, distributed by a halving schedule no one can override. For a treasurer this is the line item, the reserve, the hedge against fiat's slow erosion. This layer alone justifies adoption — but it is the floor, not the ceiling.</p>
+      </div>
+      <div class="trinity-card">
+        <div class="num">Layer Two</div>
+        <h4>The Live Network</h4>
+        <div class="tag">Global · 24/7/365</div>
+        <p>Beneath the asset sits a settlement rail that does not close on weekends, does not stop at borders, and does not require permission. It is the internet's rail for value the way TCP/IP is the rail for information. For a CFO this is the layer that converts a five-day vendor wire into a ten-minute final settlement.</p>
+      </div>
+      <div class="trinity-card">
+        <div class="num">Layer Three</div>
+        <h4>The Open Protocol</h4>
+        <div class="tag">Programmable Money</div>
+        <p>Beneath the network sits the rule set itself — written in code, enforced by every node, modifiable by no one. This is the layer that lets a corporation <em>build on</em> Bitcoin instead of merely holding it. Smart contracts on the base layer, payment streams on Lightning, tokenized credit at L3.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>A company that uses only the asset is in the game. A company that uses the asset and the network is competitive. A company that uses all three — asset, network, and protocol — is operating on rails the rest of the market hasn't even noticed yet. The Three-In-One isn't a feature list. It is a <strong>strategic layering</strong>, and the leverage compounds the deeper you go.</p>
+    </div>
+
+    <blockquote class="pull-quote-lg">
+      <q>The treasurer who treats Bitcoin as a hedge has done the easy work. The one who treats it as an operating system has done the next ten years of work.</q>
+      <cite>The Three-In-One Premise</cite>
+    </blockquote>
+  </section>
+
+  <!-- ─── SECTION X · TRIPLE-ENTRY ACCOUNTING ────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/><line x1="3" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="21" y2="10"/><path d="M10 12h4" stroke-dasharray="2 2"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">X</span>Triple-Entry Accounting</div>
+    </div>
+    <h2 class="section-h2">When the balance sheet IS the ledger.</h2>
+    <p class="section-lead">From two sets of books to one set of math.</p>
+
+    <div class="prose">
+      <p class="lead">Modern accounting was invented in 15th-century Venice. It has not been replaced.</p>
+      <p>Friar Luca Pacioli's <em>double-entry</em> system — every transaction recorded twice, once as a debit and once as a credit — was a triumph of its era because it created a self-checking record. It is also why every modern enterprise maintains two parallel books that constantly require <strong>reconciliation</strong>: yours and theirs, and every transaction is a slow handshake across the gap.</p>
+      <p>When two corporations transact in dollars, the dollar itself does not know what happened. The transaction is real only in the records each company keeps, and those records have to be reconciled with bank statements, with counterparties, with auditors, with regulators. T+2 settlement. T+5 reconciliation. T+30 audit. Friction at every step, opacity at every layer, and a small army of professionals dedicated to making the two sets of books agree.</p>
+      <p>When two corporations transact on Bitcoin, the protocol itself records the transaction. There is no "your book" and "their book." There is the <em>one ledger</em>: public, append-only, mathematically guaranteed. This is the third entry. Pacioli's two books, plus the protocol's. <strong>Triple-entry accounting.</strong></p>
+    </div>
+
+    <blockquote class="pull-quote-lg">
+      <q>The Singularity is the moment the balance sheet stops being a description of reality and becomes reality.</q>
+      <cite>The Triple-Entry Premise</cite>
+    </blockquote>
+
+    <div class="prose">
+      <p>For a CFO this collapses three things at once: settlement (T+0 instead of T+2), reconciliation (zero instead of days), and audit (continuous instead of annual). For an auditor it is an existential question — what does an auditor <em>do</em> when every transaction is already provable on a public ledger?</p>
+      <p>The job changes. The auditor's role evolves from reconciliation to verification: confirming that the off-chain narrative matches the on-chain truth. Smaller, sharper, and aimed at fraud rather than bookkeeping. The bookkeeper's role evolves from data-entry to query-writer: the chain is the source of truth, and you are reading from it, not into it. The CFO's job evolves from period-close ceremonies to <em>continuous attestation</em>.</p>
+      <p>This is not science fiction. It is already how Bitcoin-native treasuries operate. They do not maintain a "shadow ledger" of their wallet activity in QuickBooks; they query the chain directly. Reconciliation is replaced by verification. The balance sheet stops describing reality and starts <em>being</em> reality.</p>
+    </div>
+
+    <div class="sidenote">
+      <span class="sidenote-label">Why this matters now</span>
+      <p>FASB's 2024 fair-value rule change for digital assets removed the impairment-only accounting treatment that had blocked corporate adoption for a decade. As of 2026, public companies can carry Bitcoin at market value — which means upside flows to retained earnings as it accrues, in real time. <strong>The accounting friction that gated adoption is gone.</strong> The protocol is ready. The rules are ready. The next move is corporate.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION XI · ACTIVE TREASURY ───────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l4-4 4 4 4-6 6 8"/><line x1="3" y1="21" x2="21" y2="21"/><circle cx="21" cy="11" r="1.5" fill="currentColor"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">XI</span>Active Treasury</div>
+    </div>
+    <h2 class="section-h2">From HODL to operating system.</h2>
+    <p class="section-lead">Holding Bitcoin is the floor. Running on Bitcoin is the ceiling.</p>
+
+    <div class="prose">
+      <p class="lead">Most corporate Bitcoin advice in 2025 was simple: buy it, hold it, wait. That was correct for the first wave. It is no longer the maximum.</p>
+      <p>A <strong>passive treasury</strong> treats Bitcoin like gold — a store of value parked on the balance sheet for appreciation and inflation hedging. This captures the asset layer. It is fine, and for some companies it will remain the entire strategy. The reserve compounds. The hedge holds. Mission accomplished.</p>
+      <p>An <strong>active treasury</strong> treats Bitcoin like an operating system. It uses the network for settlement, the protocol for programmable cash flows, and the layered architecture (Lightning, sidechains, digital credit) to compress operating cycles that fiat-rail companies treat as fixed costs of doing business. The reserve appreciates <em>and</em> the operating model accelerates. Both at once.</p>
+    </div>
+
+    <div class="treasury-compare">
+      <div class="tc-row head">
+        <div>Function</div>
+        <div class="passive">Passive · Fiat Default</div>
+        <div class="active">Active · Bitcoin-Native</div>
+      </div>
+      <div class="tc-row">
+        <div>Reserve Asset</div>
+        <div class="cell-passive">Cash &amp; Treasuries · depreciating in real terms</div>
+        <div>BTC · perfectly inelastic, mathematically scarce</div>
+      </div>
+      <div class="tc-row">
+        <div>Settlement Network</div>
+        <div class="cell-passive">SWIFT &amp; ACH · 2–5 days · banking hours</div>
+        <div>Lightning &amp; base layer · seconds–minutes · 24/7/365</div>
+      </div>
+      <div class="tc-row">
+        <div>Vendor Payment</div>
+        <div class="cell-passive">Wire · 3–7% friction · permission-gated</div>
+        <div>Direct · &lt;$0.50 fee · permissionless</div>
+      </div>
+      <div class="tc-row">
+        <div>Payroll</div>
+        <div class="cell-passive">Bi-weekly batch · advance-pay programs needed</div>
+        <div>Streaming · per-second granularity if desired</div>
+      </div>
+      <div class="tc-row">
+        <div>Capital Raise</div>
+        <div class="cell-passive">Bank syndicate · weeks · jurisdictional gates</div>
+        <div>Digital credit issuance ($STRC, $SATA pattern)</div>
+      </div>
+      <div class="tc-row">
+        <div>Reconciliation</div>
+        <div class="cell-passive">Manual · monthly · adversarial</div>
+        <div>Continuous · on-chain · provable</div>
+      </div>
+      <div class="tc-row">
+        <div>Cost of Capital</div>
+        <div class="cell-passive">Bank-mediated · credit-rated · slow</div>
+        <div>Protocol-mediated · collateral-direct · fast</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Two companies hold the same Bitcoin reserves. The first leaves them on an exchange and waits — a passive bet that the asset will appreciate. The second uses the protocol to pay vendors instantly anywhere on earth, stream payroll continuously, issue digital credit collateralized by treasury, and earn yield on idle Bitcoin without surrendering custody.</p>
+      <p>The first company has bought the asset. The second company is <em>using</em> the network and the protocol. Their cost of capital, working capital cycle, and operational velocity are all structurally lower. <strong>That</strong> is the corporate Bitcoin opportunity. The asset is the door. The network and protocol are the room.</p>
+      <p>Most of the room is still empty. There are no incumbents to displace. The companies that build the operational playbook for the active treasury — the ones that publish the frameworks, train the teams, and prove the patterns at scale — will define what corporate Bitcoin <em>looks like</em> for the next decade.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION XII · THE THREE KEYS ───────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="14" r="3"/><path d="M10 11l9-9"/><path d="M16 5l3 3"/><path d="M13 8l3 3"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">XII</span>The Three Keys</div>
+    </div>
+    <h2 class="section-h2">Three keys. One framework.</h2>
+    <p class="section-lead">Circularity. Multiplier. Proof.</p>
+
+    <div class="prose">
+      <p class="lead">Beyond holding the asset, three operating disciplines separate Bitcoin-native businesses from Bitcoin-curious ones. Each key unlocks a different layer of the protocol stack — and each compounds with the others.</p>
+      <p>Companies that adopt one key get incremental advantage. Companies that adopt all three become structurally different organisms. The Three Keys are not features to procure or vendors to hire. They are <strong>operating disciplines</strong> — choices about how the company moves, charges, and accounts for value. They live in the playbook, not the procurement list.</p>
+    </div>
+
+    <div class="keys-grid">
+
+      <div class="key-card">
+        <div class="key-eyebrow">Key I · Circularity</div>
+        <h3 class="key-h">Circularity Over Conversion</h3>
+        <div class="prose">
+          <p>Most companies that "accept Bitcoin" today actually accept dollars. They route the customer's BTC through a payment processor that converts it to USD before it ever touches the company's accounts. The Bitcoin is a marketing veneer; the operational currency is still fiat.</p>
+          <p>A <strong>Bitcoin-native business</strong> closes the loop. It earns BTC, spends BTC, pays in BTC, and only converts to fiat at the rare necessary edges. This is <em>Bitcoin circularity</em>. It eliminates fiat leakage — the slow drain of value that happens every time a corporation cycles BTC out for fiat to make a payment, then back to BTC for treasury. Each round trip costs spreads, fees, time, and the slow inflation tax.</p>
+          <p>The opportunity is structural. A business with end-to-end Bitcoin operations — vendors paid in BTC, payroll in BTC, customer revenue retained in BTC — is a different kind of business than one that just holds Bitcoin. It is faster, cheaper, and more sovereign. Circularity is the discipline that turns "Bitcoin treasury" into "Bitcoin-native company."</p>
+          <p>The first instinct of the fiat-trained CFO is to convert. The first instinct of the Bitcoin-native CFO is to <em>route</em>. The difference compounds.</p>
+        </div>
+      </div>
+
+      <div class="key-card">
+        <div class="key-eyebrow">Key II · Multiplier</div>
+        <h3 class="key-h">The Lightning Multiplier</h3>
+        <div class="prose">
+          <p>The Bitcoin base layer is a settlement rail. It is not designed for coffee. <strong>The Lightning Network</strong>, Bitcoin's layer 2, <em>is</em> designed for coffee — and for everything between coffee and a wire transfer.</p>
+          <p>Lightning makes Bitcoin programmable in real time. Transaction fees drop to fractions of a cent. Settlement drops to milliseconds. The cost structure that made micro-payments impossible on the credit-card rails — a fixed thirty-cent floor per transaction that made anything below five dollars uneconomic — simply does not exist on Lightning.</p>
+          <p>The corporate implication is not "we can charge a quarter per article." The corporate implication is that <em>value can be streamed continuously</em>: by the second, by the action, by the kilobyte. Payroll that settles by the hour worked. Software that bills per API call at sub-penny granularity. Royalties that arrive at the artist's wallet the moment a song plays. Sub-dollar B2B transactions that legacy rails priced into oblivion.</p>
+          <p>This is the Lightning multiplier — a class of business model the legacy rails could not support, suddenly tractable. New revenue cohorts. New pricing surfaces. New customer relationships measured in milliseconds and millicents instead of months and dollars.</p>
+        </div>
+      </div>
+
+      <div class="key-card">
+        <div class="key-eyebrow">Key III · Proof</div>
+        <h3 class="key-h">Proof of Value</h3>
+        <div class="prose">
+          <p>The web's dominant business model is attention arbitrage: capture eyeballs, monetize the gap between cost-per-mille and ad revenue. That model creates an asymmetric relationship in which the user is the product and the platform is the only entity allowed to settle.</p>
+          <p>A Bitcoin-native business model inverts this. Because value can flow directly, peer-to-peer, with no platform tax, the user can pay for value received and the creator can earn value delivered — in the same transaction, at the same moment, without an intermediary running an attention casino. This is the <em>Value-4-Value</em> pattern that Lightning-native podcasts, streaming platforms, and creator tools have started building on.</p>
+          <p>For a corporate audience this matters because <strong>the same primitive scales upward</strong>. A B2B contract that streams payment as work is delivered. A vendor relationship that disburses against verified milestones. A customer cohort that pays per use, with the rails verifying the service. The protocol replaces the negotiation with a rule set. Proof of value, executed continuously.</p>
+          <p>What changes for the corporation is not the marketing department. What changes is the <em>contract surface</em> — the moment when value is exchanged moves from a quarterly invoice to a real-time event.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="prose">
+      <p>Three keys. Circularity. Multiplier. Proof. Together they describe a business that runs on the protocol instead of beside it. Together they describe a corporation whose balance sheet, cash flow, and customer relationships are all expressions of the same open rule set.</p>
+      <p>None of the keys requires a fork in the protocol. None requires a vendor relationship that doesn't already exist. They require <strong>discipline</strong> — the choice to stay in BTC instead of converting out, the choice to bill continuously instead of in batches, the choice to settle peer-to-peer instead of through a platform. Three choices. Compounded over a decade, they describe an entirely new kind of company.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION XIII · ARCHITECT, NOT ENTHUSIAST ──────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><rect x="9" y="13" width="6" height="8"/><path d="M5 11h14"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">XIII</span>Architect, Not Enthusiast</div>
+    </div>
+    <h2 class="section-h2">The leadership vacuum.</h2>
+    <p class="section-lead">Most corporate Bitcoin advice is buy-and-hold. The real opportunity is build.</p>
+
+    <div class="prose">
+      <p class="lead">There is a leadership vacuum in corporate Bitcoin. It is not where most observers think it is.</p>
+      <p>Michael Saylor has occupied the <em>treasury</em> conversation almost completely — the question of whether and how to hold Bitcoin as a reserve asset. That conversation is largely settled for forward-looking executives. They know the answer is yes. The bigger question is what comes next.</p>
+      <p>What comes next is the <strong>protocol conversation</strong>. How does a corporation operate <em>on</em> Bitcoin — not just hold it, but build with it? Pay with it. Settle with it. Issue credit on it. Stream value through it. <em>Run on it.</em></p>
+      <p>This conversation has no obvious leader. Most Bitcoin commentators occupy one of three archetypes — and none of them speak the C-suite's language:</p>
+    </div>
+
+    <ul class="archetype-list">
+      <li><b>Macro Analyst</b><span><strong>The treasury argument.</strong> Saylor, Foss, the long-form macro takes. Excellent at <em>why</em> companies should buy BTC. Quiet on the operating playbook beyond holding.</span></li>
+      <li><b>Technical Engineer</b><span><strong>The protocol mechanics.</strong> Lightning developers, mempool analysts, mining ops. Excellent at <em>how</em> the protocol works. Speaks a language the C-suite cannot translate.</span></li>
+      <li><b>Crypto Trader</b><span><strong>The price action.</strong> Short-term flow, ETF dynamics, options skew. Excellent at <em>where the price is going</em>. Not relevant to corporate strategy.</span></li>
+    </ul>
+
+    <div class="prose" style="margin-top:32px;">
+      <p>Almost no one is bridging the gap for executives — translating the protocol's capabilities into corporate strategy and operating playbooks. <strong>That gap is the opportunity.</strong></p>
+      <p>Occupying it requires positioning as an <em>architect</em>, not an enthusiast. The architect looks at a corporation as a system of capital flows, and asks how each flow could run more efficiently on protocol rails. The architect doesn't say "Bitcoin will moon"; the architect says <em>"your accounts-payable process has fourteen unnecessary steps and the protocol can collapse them to two."</em> The architect doesn't preach. The architect <strong>maps</strong>.</p>
+      <p>The macro analyst tells you the climate is changing. The engineer tells you how the wind machine works. The architect designs the building that catches the wind. Corporate Bitcoin needs more architects.</p>
+    </div>
+
+    <div class="vacuum-callout">
+      <h4>What an architect actually does</h4>
+      <p>An architect publishes <strong>frameworks</strong> (the Three Keys, the Active Treasury map, the Triple-Entry transition). An architect runs <strong>data-heavy media</strong> for CFOs (settlement latency, yield curves, jurisdictional arbitrage). An architect convenes <strong>boutique gatherings</strong> for treasurers — fifty in a room, not ten thousand at a stadium. The leadership vacuum is filled not by louder voices, but by a different category of voice: the one that translates protocol capability into corporate strategy and back.</p>
+    </div>
+
+    <div class="prose">
+      <p>This essay is the first chapter of that map. The frameworks above — the Three-In-One layering, Triple-Entry accounting, the Active Treasury comparison, the Three Keys — are tools, not theses. Pick them up. Translate them into your own company's vocabulary. Build something on the rails. The protocol is open. The opportunity is real. The vacuum will be filled. The only open question is by whom.</p>
+    </div>
+  </section>
+
+  <!-- ─── EPILOGUE DIVIDER ───────────────────────────────── -->
+  <div class="part-divider">
+    <div class="part-eyebrow">Epilogue</div>
+    <h2 class="part-h">The Choice</h2>
+    <p class="part-sub">Networks don't ask for permission. They ask for participation.</p>
+  </div>
+
   <!-- ─── CLOSING ────────────────────────────────────────── -->
   <section class="closing">
     <h3>The network is open. The rules are set.</h3>
-    <p>You wouldn't run your global communications on a fragmented, proprietary network that costs 3% to use and lets your messages be undone. The question for the modern treasurer is whether you can afford to manage your reserves that way.</p>
+    <p>You wouldn't run your global communications on a fragmented, proprietary network that costs 3% to use and lets your messages be undone. The question for the modern treasurer is whether you can afford to manage your reserves that way — and whether your competitors will keep doing it once they realize they don't have to.</p>
+    <p style="margin-top: 12px;">Networks don't ask for permission. They ask for participation. The first wave of corporate Bitcoin asked <em>whether</em>. The next wave asks <em>how deep</em>. Layer one is the asset. Layer two is the network. Layer three is the protocol. Each layer is a different decade of advantage. Each layer compounds the others. The companies that move first don't get a small head start — they get the rest of the curve.</p>
 
     <div class="nvs">
       <div class="nvs-card spec">
