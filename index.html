@@ -1,0 +1,2445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bitcoin, Networks, and the Balance Sheet Singularity · Why Bitcoin Is the Last Protocol Your Treasury Will Ever Need</title>
+<style>
+  :root {
+    /* Surfaces — dark mode, deep space */
+    --bg: #06060a;
+    --panel: #101015;
+    --panel-2: #16161c;
+    --panel-3: #1f1f27;
+    --border: #25252e;
+    --border-strong: #34343d;
+    --text: #ededed;
+    --text-soft: #c5c5cc;
+    --muted: #8a8a90;
+    --muted-2: #5a5a60;
+
+    /* Color coding — bright neon palette, Tron / accretion-disk vibe */
+    --c-info: #00d4ff;          /* TCP/IP — info protocol (separate axis) */
+    --c-info-soft: #00d4ff18;
+    --c-value: #ff6b1a;          /* Bitcoin / new / open / winning — neon orange */
+    --c-value-soft: #ff6b1a1f;
+    --c-value-glow: #ff6b1a66;
+    --c-closed: #00ff9d;         /* Fiat / dollars / old / being absorbed — neon green */
+    --c-closed-soft: #00ff9d18;
+    --c-open: #ff6b1a;           /* Bitcoin / open / new — alias for --c-value */
+    --c-open-soft: #ff6b1a1f;
+    --c-open-glow: #ff6b1a55;
+
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+
+    /* Tron-style perspective grid + radial accretion glow */
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,107,26,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,255,157,0.06) 0%, transparent 60%),
+      linear-gradient(rgba(255,107,26,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,107,26,0.045) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+    background-attachment: fixed, fixed, fixed, fixed;
+  }
+  body::before {
+    /* starfield layer A — slow shimmer */
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.65) 50%, transparent 100%),
+      radial-gradient(1px 1px at 73% 12%, rgba(255,255,255,0.55) 50%, transparent 100%),
+      radial-gradient(1px 1px at 45% 78%, rgba(255,255,255,0.45) 50%, transparent 100%),
+      radial-gradient(1px 1px at 88% 65%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(1px 1px at 12% 88%, rgba(255,255,255,0.5) 50%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 45%, rgba(255,200,150,0.55) 50%, transparent 100%),
+      radial-gradient(1px 1px at 30% 55%, rgba(255,255,255,0.45) 50%, transparent 100%),
+      radial-gradient(1px 1px at 92% 28%, rgba(255,255,255,0.55) 50%, transparent 100%);
+    background-size: 100% 100%;
+    animation: star-shimmer-a 7s ease-in-out infinite alternate;
+  }
+  body::after {
+    /* starfield layer B — opposing shimmer + faint colored stars */
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 8% 18%, rgba(255,255,255,0.55) 50%, transparent 100%),
+      radial-gradient(0.8px 0.8px at 38% 8%, rgba(255,255,255,0.4) 50%, transparent 100%),
+      radial-gradient(1.2px 1.2px at 67% 36%, rgba(180,220,255,0.5) 50%, transparent 100%),
+      radial-gradient(1px 1px at 82% 80%, rgba(255,255,255,0.45) 50%, transparent 100%),
+      radial-gradient(1px 1px at 25% 70%, rgba(255,200,150,0.4) 50%, transparent 100%),
+      radial-gradient(0.8px 0.8px at 95% 50%, rgba(255,255,255,0.5) 50%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 55% 90%, rgba(180,220,255,0.45) 50%, transparent 100%),
+      radial-gradient(0.8px 0.8px at 50% 22%, rgba(255,255,255,0.35) 50%, transparent 100%),
+      radial-gradient(1px 1px at 18% 50%, rgba(255,255,255,0.4) 50%, transparent 100%);
+    background-size: 100% 100%;
+    animation: star-shimmer-b 11s ease-in-out infinite alternate;
+  }
+  @keyframes star-shimmer-a {
+    0%   { opacity: 0.65; transform: translate3d(0, 0, 0); }
+    50%  { opacity: 1;    transform: translate3d(0, -2px, 0); }
+    100% { opacity: 0.75; transform: translate3d(0, 1px, 0); }
+  }
+  @keyframes star-shimmer-b {
+    0%   { opacity: 0.4; transform: translate3d(0, 0, 0); }
+    33%  { opacity: 0.85; transform: translate3d(1px, 1px, 0); }
+    66%  { opacity: 0.55; transform: translate3d(-1px, -1px, 0); }
+    100% { opacity: 0.9; transform: translate3d(0, 0, 0); }
+  }
+  /* Twinkle accent — a few brighter dots that pulse on a faster cycle */
+  .twinkle-field {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .twinkle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 4px rgba(255,255,255,0.9);
+    animation: twinkle 3.5s ease-in-out infinite;
+    opacity: 0;
+  }
+  .twinkle:nth-child(1) { top: 14%; left: 11%; animation-delay: 0s;   }
+  .twinkle:nth-child(2) { top: 22%; left: 78%; animation-delay: 1.2s; }
+  .twinkle:nth-child(3) { top: 48%; left: 92%; animation-delay: 0.6s; }
+  .twinkle:nth-child(4) { top: 62%; left: 16%; animation-delay: 2.1s; }
+  .twinkle:nth-child(5) { top: 81%; left: 64%; animation-delay: 1.7s; background: #ffd9a0; box-shadow: 0 0 5px rgba(255,217,160,0.9); }
+  .twinkle:nth-child(6) { top: 36%; left: 42%; animation-delay: 2.6s; }
+  .twinkle:nth-child(7) { top: 88%; left: 37%; animation-delay: 0.3s; background: #b8e6ff; box-shadow: 0 0 5px rgba(184,230,255,0.9); }
+  .twinkle:nth-child(8) { top: 7%;  left: 56%; animation-delay: 3.0s; }
+  .twinkle:nth-child(9) { top: 70%; left: 84%; animation-delay: 1.4s; }
+  .twinkle:nth-child(10){ top: 52%; left: 7%;  animation-delay: 2.4s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.6); }
+    50%      { opacity: 1; transform: scale(1.2); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body::before, body::after { animation: none; }
+    .twinkle { animation: none; opacity: 0.7; }
+  }
+  .wrap { position: relative; z-index: 1; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 56px 28px 120px;
+  }
+
+  /* ─── HEADER ───────────────────────────────────────────── */
+  header { margin-bottom: 56px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin: 0 0 18px;
+  }
+  h1 .accent {
+    color: var(--c-value);
+    text-shadow:
+      0 0 12px rgba(255,107,26,0.55),
+      0 0 32px rgba(255,107,26,0.25);
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 19px;
+    max-width: 720px;
+    margin: 0 0 32px;
+    line-height: 1.5;
+  }
+  .meta {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .meta strong { color: var(--text-soft); font-weight: 600; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 40px; }
+    .subtitle { font-size: 17px; }
+    .wrap { padding: 40px 20px 80px; }
+  }
+
+  /* ─── HERO IMAGE BANNER ───────────────────────────────── */
+  .hero-banner {
+    position: relative;
+    margin: 0 -28px 56px;
+    padding: 0;
+    aspect-ratio: 3 / 1;
+    background: #000;
+    border-top: 1px solid var(--c-value);
+    border-bottom: 1px solid var(--c-value);
+    overflow: hidden;
+    box-shadow:
+      0 0 60px rgba(255, 107, 26, 0.25),
+      inset 0 0 80px rgba(0, 0, 0, 0.4);
+  }
+  .hero-bg-fallback,
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .hero-bg-fallback { z-index: 1; }
+  .hero-bg-img { object-fit: cover; z-index: 2; }
+  .hero-banner::before {
+    /* cinematic blend gradient (above image) */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(6,6,10,0) 60%, rgba(6,6,10,0.55) 100%),
+      linear-gradient(90deg, rgba(6,6,10,0.5) 0%, transparent 15%, transparent 85%, rgba(6,6,10,0.5) 100%);
+    pointer-events: none;
+    z-index: 3;
+  }
+  .hero-banner::after {
+    /* corner crosshair / hud accent */
+    content: "";
+    position: absolute;
+    inset: 14px;
+    background:
+      linear-gradient(90deg, var(--c-value) 0 24px, transparent 24px) 0 0/100% 1px no-repeat,
+      linear-gradient(180deg, var(--c-value) 0 24px, transparent 24px) 0 0/1px 100% no-repeat;
+    pointer-events: none;
+    opacity: 0.85;
+    z-index: 4;
+  }
+  .hero-banner-caption {
+    position: absolute;
+    left: 28px;
+    bottom: 22px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    color: var(--c-value);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(255,107,26,0.6);
+    z-index: 5;
+  }
+  /* SVG fallback animations — vortex spin + money flow */
+  @keyframes hero-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes hero-flow {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: -120; }
+  }
+  @keyframes hero-pulse {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 1; }
+  }
+  .hero-bg-fallback .vortex-spin {
+    transform-origin: 350px 80px;
+    transform-box: fill-box;
+    animation: hero-spin 40s linear infinite;
+  }
+  .hero-bg-fallback .money-flow {
+    animation: hero-flow 6s linear infinite;
+  }
+  .hero-bg-fallback .money-flow.f2 { animation-duration: 9s; }
+  .hero-bg-fallback .money-flow.f3 { animation-duration: 12s; animation-direction: reverse; }
+  .hero-bg-fallback .b-symbol { animation: hero-pulse 3s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg-fallback .vortex-spin,
+    .hero-bg-fallback .money-flow,
+    .hero-bg-fallback .b-symbol { animation: none; }
+  }
+  @media (max-width: 640px) {
+    .hero-banner { margin: 0 -20px 40px; aspect-ratio: 2 / 1; }
+    .hero-banner-caption { font-size: 9px; bottom: 14px; left: 16px; }
+  }
+
+  /* ─── PROLOGUE ─────────────────────────────────────────── */
+  .prologue {
+    margin-bottom: 72px;
+    padding: 40px 0 8px;
+    border-top: 1px solid var(--border);
+  }
+  .prologue-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-value);
+    margin-bottom: 18px;
+  }
+  .prologue h2 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 28px;
+    max-width: 780px;
+  }
+  .prologue p {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 780px;
+  }
+  .prologue p strong { color: var(--text); font-weight: 600; }
+  .prologue p em.amp {
+    font-style: normal;
+    color: var(--c-value);
+    font-weight: 500;
+    border-bottom: 1px dashed var(--c-value);
+    padding-bottom: 1px;
+  }
+  .prologue-kicker {
+    margin-top: 28px;
+    padding: 18px 22px;
+    border-left: 3px solid var(--c-value);
+    background: var(--panel);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 17px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.5;
+    max-width: 780px;
+  }
+  .prologue-kicker strong { color: var(--c-value); font-weight: 700; }
+  @media (max-width: 640px) {
+    .prologue h2 { font-size: 28px; }
+    .prologue p { font-size: 15px; }
+    .prologue-kicker { font-size: 15px; }
+  }
+
+  /* ─── HERO STAT ────────────────────────────────────────── */
+  .hero-stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    margin-bottom: 80px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-stat::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(80% 60% at 100% 0%, var(--c-value-soft) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  @media (min-width: 720px) {
+    .hero-stat { grid-template-columns: auto 1fr; gap: 48px; padding: 56px; }
+  }
+  .hero-num {
+    font-size: 120px;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    color: var(--c-value);
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    text-shadow:
+      0 0 18px rgba(255,107,26,0.5),
+      0 0 48px rgba(255,107,26,0.25);
+  }
+  .hero-num small { font-size: 44px; letter-spacing: -0.04em; }
+  .hero-stat-body { position: relative; }
+  .hero-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-value);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .hero-stat-h {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+  .hero-stat-sub {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .hero-num { font-size: 88px; }
+    .hero-num small { font-size: 32px; }
+  }
+
+  /* ─── SECTION ──────────────────────────────────────────── */
+  .section { margin-bottom: 80px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .section-title .num-roman { color: var(--text-soft); margin-right: 10px; }
+  .section-h2 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    line-height: 1.15;
+  }
+  .section-lead {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 760px;
+    margin: 0 0 36px;
+    line-height: 1.55;
+  }
+  .section-lead strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 640px) {
+    .section-h2 { font-size: 26px; }
+    .section-lead { font-size: 15px; }
+  }
+
+  /* ─── TIMELINE ─────────────────────────────────────────── */
+  .timeline {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 760px) {
+    .timeline {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 26px;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--border-strong) 10%,
+        var(--border-strong) 90%,
+        transparent 100%);
+    }
+  }
+  .tl-node {
+    position: relative;
+    padding: 0 8px;
+  }
+  .tl-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--panel-3);
+    border: 2px solid var(--border-strong);
+    margin: 19px auto 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .tl-node:last-child .tl-dot {
+    background: var(--c-value);
+    border-color: var(--c-value);
+    box-shadow: 0 0 0 4px var(--c-value-soft);
+  }
+  .tl-year {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .tl-name {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .tl-node:last-child .tl-name { color: var(--c-value); }
+  .tl-net {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.4;
+  }
+  @media (max-width: 760px) {
+    .timeline { gap: 8px; }
+    .tl-node {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 16px;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+    .tl-dot { display: none; }
+    .tl-year { text-align: left; margin: 0; }
+    .tl-name { text-align: left; margin: 0 0 2px; }
+    .tl-net { text-align: left; }
+    .tl-node:last-child {
+      border-color: var(--c-value);
+      background: linear-gradient(135deg, var(--panel) 0%, var(--c-value-soft) 100%);
+    }
+  }
+
+  /* ─── PROTOCOL TABLE ───────────────────────────────────── */
+  .ptable {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .ptable-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .ptable-row:last-child { border-bottom: none; }
+  .ptable-row > div {
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .ptable-head { background: var(--panel-2); }
+  .ptable-head > div {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .ptable-head > div.col-info { color: var(--c-info); }
+  .ptable-head > div.col-value { color: var(--c-value); }
+  .ptable-row > div:first-child {
+    background: var(--panel-2);
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+  }
+  .ptable-row > div.cell-info { border-right: 1px solid var(--border); }
+  .ptable-row > div strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 720px) {
+    .ptable-row { grid-template-columns: 1fr; }
+    .ptable-row > div { border-right: none !important; border-bottom: 1px solid var(--border); }
+    .ptable-row > div:last-child { border-bottom: none; }
+    .ptable-head { display: none; }
+    .ptable-row > div:first-child { background: var(--panel-3); }
+  }
+
+  /* ─── GLASS CLOCK COMPARISON ───────────────────────────── */
+  .clock-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 760px) {
+    .clock-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+  }
+  .clock-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .clock-card.closed { border-top: 3px solid var(--c-closed); }
+  .clock-card.open { border-top: 3px solid var(--c-open); }
+  .clock-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .clock-card.closed .clock-label { color: var(--c-closed); }
+  .clock-card.open .clock-label { color: var(--c-open); }
+  .clock-h {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .clock-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+    line-height: 1.55;
+  }
+  .clock-viz {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0 8px;
+  }
+  /* Clock SVG sizing handled inline */
+  .clock-list {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .clock-list li {
+    font-size: 13px;
+    color: var(--text-soft);
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .clock-list li::before {
+    content: "";
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .clock-card.closed .clock-list li::before { background: var(--c-closed); }
+  .clock-card.open .clock-list li::before { background: var(--c-open); }
+
+  /* ─── GAME THEORY TABLE ────────────────────────────────── */
+  .game-table {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .game-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .game-row:last-child { border-bottom: none; }
+  .game-row > div {
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .game-row.head { background: var(--panel-2); }
+  .game-row.head > div {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+  .game-row.head > div:first-child { color: var(--muted); }
+  .game-row.head > div.old { color: var(--c-closed); }
+  .game-row.head > div.new { color: var(--c-open); }
+  .game-row > div:first-child {
+    background: var(--panel-2);
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+  }
+  .game-row > div.cell-old { border-right: 1px solid var(--border); }
+  .game-row > div strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 720px) {
+    .game-row { grid-template-columns: 1fr; }
+    .game-row > div { border-right: none !important; border-bottom: 1px solid var(--border); }
+    .game-row > div:last-child { border-bottom: none; }
+    .game-row.head { display: none; }
+    .game-row > div:first-child { background: var(--panel-3); }
+  }
+
+  /* ─── UNBREAKABLES ─────────────────────────────────────── */
+  .ub-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 760px) { .ub-grid { grid-template-columns: repeat(3, 1fr); } }
+  .ub-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .ub-card:hover { transform: translateY(-2px); border-color: var(--border-strong); }
+  .ub-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c-value);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .ub-h {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .ub-body {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.55;
+  }
+  .ub-body strong { color: var(--text-soft); font-weight: 500; }
+
+  /* ─── PROTOCOL STACK DIAGRAM ───────────────────────────── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  @media (min-width: 760px) { .stack-grid { grid-template-columns: 1fr 1fr; } }
+  .stack-col {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .stack-col.info { border-top: 3px solid var(--c-info); }
+  .stack-col.value { border-top: 3px solid var(--c-value); }
+  .stack-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .stack-col.info .stack-label { color: var(--c-info); }
+  .stack-col.value .stack-label { color: var(--c-value); }
+  .stack-h {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .stack-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 22px;
+  }
+  .stack-layer {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+  .stack-layer:last-child { margin-bottom: 0; }
+  .stack-tier {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 3px 8px;
+    background: var(--panel-3);
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .stack-name { font-weight: 500; color: var(--text-soft); }
+  .stack-col.info .stack-layer.base { background: var(--c-info-soft); border-color: var(--c-info); }
+  .stack-col.value .stack-layer.base { background: var(--c-value-soft); border-color: var(--c-value); }
+  .stack-col .stack-layer.base .stack-tier {
+    background: rgba(255,255,255,0.05);
+  }
+  .stack-col .stack-layer.base .stack-name { color: var(--text); font-weight: 600; }
+
+  /* ─── NEUTRALITY CHARTS ────────────────────────────────── */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 760px) { .charts-grid { grid-template-columns: 1fr 1fr; gap: 20px; } }
+  .chart-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .chart-num {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .chart-h {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .chart-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 18px;
+    line-height: 1.5;
+  }
+  .chart-svg-wrap {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .chart-svg-wrap svg { display: block; width: 100%; height: auto; }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .chart-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chart-legend i {
+    display: inline-block;
+    width: 10px;
+    height: 2px;
+    border-radius: 1px;
+  }
+
+  /* ─── PROTOCOL EQUIVALENCE VISUAL ──────────────────────── */
+  .equiv {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 28px;
+    margin-bottom: 32px;
+  }
+  .equiv-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+  @media (min-width: 760px) { .equiv-grid { grid-template-columns: 1fr auto 1fr; gap: 32px; } }
+  .equiv-side {
+    text-align: center;
+  }
+  .equiv-side .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .equiv-side.info .label { color: var(--c-info); }
+  .equiv-side.value .label { color: var(--c-value); }
+  .equiv-side .pname {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+  }
+  .equiv-side.info .pname { color: var(--c-info); }
+  .equiv-side.value .pname { color: var(--c-value); }
+  .equiv-side .pdesc {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .equiv-eq {
+    font-size: 32px;
+    color: var(--muted);
+    font-weight: 300;
+    text-align: center;
+  }
+
+  /* ─── PULL QUOTE ───────────────────────────────────────── */
+  .pullquote {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--c-value);
+    border-radius: var(--radius-sm);
+    padding: 32px 36px;
+    margin: 0;
+  }
+  .pullquote q {
+    display: block;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    quotes: """ """;
+  }
+  .pullquote q::before, .pullquote q::after { color: var(--c-value); }
+  .pullquote cite {
+    display: block;
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-style: normal;
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    .pullquote { padding: 24px; }
+    .pullquote q { font-size: 18px; }
+  }
+
+  /* ─── CLOSING ──────────────────────────────────────────── */
+  .closing {
+    background: linear-gradient(135deg, var(--panel) 0%, #0f0f10 100%);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 48px 36px;
+    text-align: center;
+    margin-top: 24px;
+  }
+  .closing h3 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    line-height: 1.2;
+  }
+  .closing p {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 580px;
+    margin: 0 auto 28px;
+    line-height: 1.55;
+  }
+  .closing .kicker {
+    font-size: 14px;
+    color: var(--c-value);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 12px rgba(255,107,26,0.45);
+  }
+  .closing {
+    position: relative;
+    overflow: hidden;
+  }
+  .closing::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%,
+        rgba(255,107,26,0.18) 0%,
+        rgba(255,107,26,0.08) 35%,
+        transparent 70%);
+    pointer-events: none;
+  }
+  .closing::after {
+    content: "";
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%,
+        rgba(0,255,157,0.12) 0%,
+        rgba(0,255,157,0.04) 40%,
+        transparent 70%);
+    pointer-events: none;
+  }
+  .closing > * { position: relative; z-index: 1; }
+  @media (max-width: 640px) {
+    .closing { padding: 32px 24px; }
+    .closing h3 { font-size: 22px; }
+    .closing p { font-size: 15px; }
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted-2);
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ─── TOOLTIPS ─────────────────────────────────────────── */
+  .tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--c-value);
+    padding-bottom: 1px;
+  }
+  .tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--panel-3);
+    border: 1px solid var(--c-value);
+    color: var(--text);
+    font-size: 12.5px;
+    line-height: 1.45;
+    font-weight: 400;
+    padding: 10px 14px;
+    border-radius: 8px;
+    width: max-content;
+    max-width: 260px;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 200;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 0 16px rgba(255, 107, 26, 0.18);
+    white-space: normal;
+  }
+  .tip::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    border: 6px solid transparent;
+    border-top-color: var(--c-value);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 201;
+  }
+  .tip:hover::after,
+  .tip:focus::after,
+  .tip:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .tip:hover::before,
+  .tip:focus::before,
+  .tip:focus-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  /* If tooltip risks clipping at right edge, adjust */
+  .tip.tip-right::after { left: auto; right: 0; transform: translateY(4px); }
+  .tip.tip-right:hover::after { transform: translateY(0); }
+  .tip.tip-right::before { left: auto; right: 12px; transform: translateY(4px); }
+  .tip.tip-right:hover::before { transform: translateY(0); }
+  /* Below variant — flip arrow underneath term */
+  .tip.tip-below::after { bottom: auto; top: calc(100% + 10px); }
+  .tip.tip-below::before { bottom: auto; top: calc(100% + 4px); border-top-color: transparent; border-bottom-color: var(--c-value); }
+  @media (max-width: 640px) {
+    .tip::after { max-width: 220px; font-size: 12px; }
+  }
+
+  /* ─── ICONOGRAPHY ──────────────────────────────────────── */
+  .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+  .icon svg { display: block; }
+
+  /* Section header — eyebrow with inline icon chip */
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .sec-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-soft);
+  }
+  .sec-icon svg { width: 18px; height: 18px; }
+  .sec-head .section-title { margin-bottom: 0; }
+
+  /* Timeline icons (replaces simple dot) */
+  .tl-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid var(--tl-color, var(--border));
+    background: linear-gradient(135deg, var(--panel) 0%, var(--tl-tint, var(--panel-2)) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px auto 14px;
+    position: relative;
+    z-index: 2;
+    color: var(--tl-color, var(--muted));
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.18s ease;
+  }
+  .tl-icon svg { width: 22px; height: 22px; }
+  .tl-node:hover .tl-icon { box-shadow: 0 0 0 4px var(--tl-tint, transparent); }
+  .tl-node:last-child .tl-icon {
+    box-shadow: 0 0 0 4px var(--tl-tint);
+  }
+  .tl-node:last-child .tl-name { color: var(--tl-color); }
+  /* Per-network tints */
+  .tl-voice  { --tl-color: #ff6090; --tl-tint: #ff609022; }
+  .tl-energy { --tl-color: #fbbf24; --tl-tint: #fbbf2422; }
+  .tl-www    { --tl-color: #00d4ff; --tl-tint: #00d4ff22; }
+  .tl-comm   { --tl-color: #a855f7; --tl-tint: #a855f722; }
+  .tl-btc    { --tl-color: #ff6b1a; --tl-tint: #ff6b1a22; }
+  .tl-year { color: var(--tl-color, var(--muted)); opacity: 0.85; }
+  @media (min-width: 760px) {
+    .timeline::before { top: 32px; }
+  }
+  @media (max-width: 760px) {
+    .tl-icon { width: 40px; height: 40px; margin: 0; }
+    .tl-icon svg { width: 18px; height: 18px; }
+    .tl-node {
+      grid-template-columns: 40px 80px 1fr !important;
+    }
+  }
+
+  /* Big unbreakable icons */
+  .ub-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: var(--c-value-soft);
+    border: 1px solid var(--c-value);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-value);
+    margin-bottom: 18px;
+  }
+  .ub-icon svg { width: 28px; height: 28px; }
+
+  /* Game theory inline icons */
+  .gt-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: -4px;
+    flex-shrink: 0;
+  }
+  .gt-icon.old { color: var(--c-closed); }
+  .gt-icon.new { color: var(--c-open); }
+  .gt-cell { display: flex; gap: 4px; align-items: flex-start; }
+
+  /* ─── TOPOLOGY DIAGRAM ─────────────────────────────────── */
+  .topology {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  @media (min-width: 760px) { .topology { grid-template-columns: 1fr 1fr; gap: 20px; } }
+  .topo-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+  }
+  .topo-card.closed { border-top: 3px solid var(--c-closed); }
+  .topo-card.open { border-top: 3px solid var(--c-open); }
+  .topo-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .topo-card.closed .topo-label { color: var(--c-closed); }
+  .topo-card.open .topo-label { color: var(--c-open); }
+  .topo-h {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .topo-svg {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+  }
+  .topo-svg svg { display: block; width: 100%; height: auto; max-height: 220px; margin: 0 auto; }
+  .topo-cap {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ─── STANDARD GAUGE RAILROAD VISUAL ───────────────────── */
+  .gauge {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (min-width: 760px) { .gauge { grid-template-columns: 1.1fr 1fr; gap: 36px; padding: 40px; } }
+  .gauge-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--c-value);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .gauge-h {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .gauge-body {
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .gauge-body strong { color: var(--text); }
+  .gauge-svg {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+  .gauge-svg svg { display: block; width: 100%; height: auto; }
+
+  /* ─── STANDARDS LIST (Standard Gauge expansion) ─────────── */
+  .standards-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 18px 0 0;
+  }
+  @media (min-width: 720px) { .standards-list { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 920px) { .standards-list { grid-template-columns: repeat(4, 1fr); } }
+  .standards-list li {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.45;
+  }
+  .standards-list li b {
+    display: block;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: var(--c-value);
+    margin-bottom: 4px;
+  }
+  .gauge-expand {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 32px;
+    margin: 0 0 24px;
+  }
+  .gauge-expand h4 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+    color: var(--text);
+  }
+  .gauge-expand p {
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0 0 14px;
+    max-width: 760px;
+  }
+  .gauge-expand p strong { color: var(--text); }
+  .gauge-expand p em { color: var(--c-value); font-style: normal; font-weight: 500; }
+
+  /* ─── TOLLBOOTH (USD rails vs Bitcoin rail) ─────────────── */
+  .tollbooth {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 32px;
+    margin: 0 0 32px;
+  }
+  .tollbooth h4 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+  }
+  .tollbooth-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 28px;
+    max-width: 720px;
+    line-height: 1.55;
+  }
+  .rail {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 18px 16px;
+    background: var(--panel-2);
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .rail:last-child { margin-bottom: 0; }
+  .rail.rail-usd { border-left: 3px solid var(--c-closed); }
+  .rail.rail-btc { border-left: 3px solid var(--c-value); }
+  .rail-meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .rail-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .rail-usd .rail-pill { background: var(--c-closed-soft); color: var(--c-closed); border: 1px solid var(--c-closed); }
+  .rail-btc .rail-pill { background: var(--c-value-soft); color: var(--c-value); border: 1px solid var(--c-value); }
+  .rail-stat {
+    color: var(--text-soft);
+    font-size: 12.5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .rail-stat strong { color: var(--text); font-weight: 600; }
+  .rail-track {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    overflow-x: auto;
+    padding: 4px 0 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rail-track::-webkit-scrollbar { height: 4px; }
+  .rail-track::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+  .rail-usd .rail-track { color: var(--c-closed); }
+  .rail-btc .rail-track { color: var(--c-value); }
+  .rail-track::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 5%;
+    right: 5%;
+    height: 2px;
+    background: currentColor;
+    opacity: 0.35;
+    z-index: 1;
+  }
+  .rail-stop {
+    flex: 1 0 auto;
+    min-width: 78px;
+    text-align: center;
+    position: relative;
+    padding: 0 4px;
+  }
+  .rail-stop .dot {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    position: relative;
+    z-index: 2;
+    background: var(--panel-2);
+    border: 2px solid currentColor;
+  }
+  .rail-stop.endpoint .dot {
+    background: currentColor;
+    width: 16px;
+    height: 16px;
+  }
+  .rail-stop b {
+    font-size: 11.5px;
+    color: var(--text);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    line-height: 1.25;
+  }
+  .rail-stop i {
+    font-style: normal;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+  }
+  .rail-stop.wide { min-width: 220px; flex: 2 0 auto; }
+  .rail-stop.wide b { font-size: 12.5px; color: var(--c-value); letter-spacing: 0.02em; }
+  .rail-stop.wide .dot { box-shadow: 0 0 0 4px var(--c-value-soft); }
+  .rail-stop.endpoint b { color: var(--text); }
+  @media (max-width: 640px) {
+    .rail-stop { min-width: 88px; }
+    .rail-meta { gap: 10px; }
+    .rail-stat { font-size: 11.5px; }
+  }
+
+  /* ─── ENERGY ANCHOR VISUAL ─────────────────────────────── */
+  .anchor {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    margin-top: 28px;
+  }
+  .anchor-svg svg { display: block; max-width: 480px; width: 100%; height: auto; margin: 0 auto; }
+  .anchor-cap {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 14px auto 0;
+    max-width: 540px;
+    line-height: 1.5;
+  }
+  .anchor-cap strong { color: var(--text-soft); }
+
+  /* ─── NODE vs SPECTATOR (closing visual) ───────────────── */
+  .nvs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 28px 0 8px;
+  }
+  @media (min-width: 580px) { .nvs { grid-template-columns: 1fr 1fr; } }
+  .nvs-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 16px;
+    text-align: center;
+    background: var(--panel-2);
+  }
+  .nvs-card.spec { color: var(--muted); }
+  .nvs-card.node { border-color: var(--c-value); background: var(--c-value-soft); color: var(--text); }
+  .nvs-icon { width: 28px; height: 28px; margin: 0 auto 8px; }
+  .nvs-card.spec .nvs-icon { color: var(--muted); }
+  .nvs-card.node .nvs-icon { color: var(--c-value); }
+  .nvs-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+
+</style>
+</head>
+<body>
+<div class="twinkle-field" aria-hidden="true">
+  <span class="twinkle"></span><span class="twinkle"></span><span class="twinkle"></span>
+  <span class="twinkle"></span><span class="twinkle"></span><span class="twinkle"></span>
+  <span class="twinkle"></span><span class="twinkle"></span><span class="twinkle"></span>
+  <span class="twinkle"></span>
+</div>
+<div class="wrap">
+
+  <!-- ─── HEADER ─────────────────────────────────────────── -->
+  <header>
+    <span class="eyebrow">An Essay on Zero-to-One Networks</span>
+    <h1>Bitcoin, Networks, and the Balance Sheet <span class="accent">Singularity</span></h1>
+    <p class="subtitle">Why Bitcoin is the last protocol your treasury will ever need — a study of the zero-to-one networks that rewire civilization, and the one finally networking trust.</p>
+    <div class="meta">
+      <span><strong>Topic</strong> · Corporate Bitcoin Adoption</span>
+      <span><strong>Format</strong> · Network Theory + Capital Strategy</span>
+      <span><strong>Reading Time</strong> · 6 min</span>
+    </div>
+  </header>
+
+  <!-- ─── HERO IMAGE BANNER ──────────────────────────────── -->
+  <figure class="hero-banner" aria-label="Capital flowing into the Bitcoin singularity">
+    <!-- SVG fallback: animated singularity composition (always renders) -->
+    <svg class="hero-bg-fallback" viewBox="0 0 480 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="vortex-bg" cx="73%" cy="50%" r="42%">
+          <stop offset="0%" stop-color="#ff6b1a" stop-opacity="0.55"/>
+          <stop offset="35%" stop-color="#ff5500" stop-opacity="0.30"/>
+          <stop offset="70%" stop-color="#aa1900" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="dollar-haze" cx="18%" cy="85%" r="32%">
+          <stop offset="0%" stop-color="#00ff9d" stop-opacity="0.20"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="b-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- background fields -->
+      <rect width="100%" height="100%" fill="#000"/>
+      <rect width="100%" height="100%" fill="url(#vortex-bg)"/>
+      <rect width="100%" height="100%" fill="url(#dollar-haze)"/>
+
+      <!-- vortex (orange accretion disk) centered around (350, 80) -->
+      <g>
+        <ellipse class="vortex-spin" cx="350" cy="80" rx="92" ry="46" fill="none" stroke="#ff6b1a" stroke-width="0.8" opacity="0.30" stroke-dasharray="2 4"/>
+        <ellipse cx="350" cy="80" rx="78" ry="38" fill="none" stroke="#ff6b1a" stroke-width="1" opacity="0.40"/>
+        <ellipse cx="350" cy="80" rx="62" ry="30" fill="none" stroke="#ff6b1a" stroke-width="1.2" opacity="0.55"/>
+        <ellipse cx="350" cy="80" rx="48" ry="22" fill="none" stroke="#ff6b1a" stroke-width="1.5" opacity="0.70"/>
+        <ellipse cx="350" cy="80" rx="35" ry="15" fill="none" stroke="#ff6b1a" stroke-width="2" opacity="0.85"/>
+        <!-- event horizon -->
+        <ellipse cx="350" cy="80" rx="22" ry="11" fill="#000" stroke="#ff6b1a" stroke-width="2"/>
+        <!-- ₿ symbol -->
+        <text class="b-symbol" x="350" y="86" text-anchor="middle"
+              font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+              font-size="18" font-weight="800"
+              fill="#ff6b1a"
+              filter="url(#b-glow)">₿</text>
+      </g>
+
+      <!-- accretion particles -->
+      <g fill="#ff6b1a">
+        <circle cx="280" cy="55" r="1"/>
+        <circle cx="295" cy="105" r="1.2"/>
+        <circle cx="425" cy="78" r="1"/>
+        <circle cx="395" cy="40" r="1.4"/>
+        <circle cx="410" cy="115" r="0.8"/>
+        <circle cx="300" cy="80" r="0.6" opacity="0.6"/>
+        <circle cx="270" cy="78" r="1" opacity="0.7"/>
+      </g>
+
+      <!-- green money streams flowing in from lower-left -->
+      <g fill="none" stroke="#00ff9d" stroke-linecap="round">
+        <path class="money-flow" d="M -10 145 Q 100 130, 200 110 T 320 85" stroke-width="1.5" opacity="0.7" stroke-dasharray="4 8"/>
+        <path class="money-flow f2" d="M 20 150 Q 130 138, 220 115 T 325 84" stroke-width="1.2" opacity="0.55" stroke-dasharray="3 6"/>
+        <path class="money-flow f3" d="M -20 130 Q 90 120, 195 100 T 322 82" stroke-width="1" opacity="0.5" stroke-dasharray="5 9"/>
+      </g>
+
+      <!-- small dollar bill rectangles near origin -->
+      <g stroke="#00ff9d" fill="#00ff9d" fill-opacity="0.12">
+        <rect x="-5" y="120" width="18" height="10" rx="1" stroke-width="0.8" opacity="0.7" transform="rotate(-15 4 125)"/>
+        <rect x="20" y="140" width="16" height="9" rx="1" stroke-width="0.8" opacity="0.6" transform="rotate(-22 28 145)"/>
+        <rect x="55" y="135" width="14" height="8" rx="1" stroke-width="0.7" opacity="0.5" transform="rotate(-12 62 139)"/>
+      </g>
+    </svg>
+
+    <!-- Optional real image — covers the SVG when present, removes itself if missing -->
+    <img class="hero-bg-img" src="assets/singularity-hero.jpg" alt="Capital flowing into the Bitcoin singularity" onerror="this.remove()">
+
+    <span class="hero-banner-caption">Fig. 01 · Capital event horizon</span>
+  </figure>
+
+  <!-- ─── PROLOGUE ───────────────────────────────────────── -->
+  <section class="prologue" aria-label="Prologue">
+    <div class="prologue-eyebrow">Prologue · The New Reality</div>
+    <h2>In physics, a singularity is a point where the traditional laws of the universe break down and a new reality takes hold. In the corporate world, we have reached that point.</h2>
+    <p>For the last century, your balance sheet has existed in a state of <span class="tip" tabindex="0" data-tip="A truth backed by trust in authority — not by math. Flexible, revisable, and subject to political need. The opposite of a fixed protocol.">"Soft Truth."</span> Your reserves were subject to the shifting policies of central banks, the friction of legacy payment rails, and the inevitable debasement of fiat currency. Your capital was not a fixed constant; it was a variable controlled by someone else.</p>
+    <p>Bitcoin is the <span class="tip" tabindex="0" data-tip="Peter Thiel's framing: creating something genuinely new (0→1), versus copying or scaling something that already exists (1→n).">Zero-to-One</span> moment where <strong>Trust became a Protocol</strong>. It represents a technological singularity for the corporate treasury — the point where value moves from the "Old Game" of human-managed policy to the "New Game" of mathematically-enforced certainty.</p>
+    <p>When you adopt a monetary protocol, you aren't just "buying an asset." You are migrating your company's lifeblood onto the only network in human history where the rules are written in math, anchored by energy, and immune to the referee's whim. The gears of the global economy are being replaced by a <strong>Glass Clock</strong> — transparent, immutable, and perfectly scarce.</p>
+    <div class="prologue-kicker">
+      This is the <strong>Great Standardization</strong>. The question is no longer <em>if</em> you will play, but <em>when</em> you will choose to adopt the protocol.
+    </div>
+  </section>
+
+  <!-- ─── HERO STAT ──────────────────────────────────────── -->
+  <section class="hero-stat" aria-label="Headline statistic">
+    <div class="hero-num">2.8<small>×</small></div>
+    <div class="hero-stat-body">
+      <div class="hero-stat-label">The Scarcity Delta · 2026</div>
+      <h2 class="hero-stat-h">Corporate treasuries and ETFs are absorbing Bitcoin <strong>2.8&times; faster</strong> than miners can produce it.</h2>
+      <p class="hero-stat-sub">In every prior asset class, demand pulled new supply out of the earth. Bitcoin is the first asset where the protocol is mathematically <span class="tip" tabindex="0" data-tip="Inelastic supply: the quantity available doesn't increase even when demand rises. Bitcoin's 21M cap is the first perfectly inelastic asset in history.">indifferent to demand</span>. That's not a market trend — it is a structural mismatch with no precedent in human history.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION I · THE LEAP ───────────────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M14 8h6v6"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">I</span>The Evolution of the Unstoppable</div>
+    </div>
+    <h2 class="section-h2">Humanity advances in leaps of network convergence.</h2>
+    <p class="section-lead">
+      Each of these technologies arrived at "one" from "zero" — a vertical leap that didn't just add to the world, it multiplied its possibilities. We were trapped by geography until we networked <strong>energy</strong>. Trapped by silence until we networked <strong>voice</strong>. Trapped by silos until we networked <strong>information</strong>. Until 2009, we were still trapped by <strong>trust</strong>.
+    </p>
+
+    <div class="timeline">
+      <div class="tl-node tl-voice">
+        <div class="tl-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A14 14 0 0 1 4 7a3 3 0 0 1 1-3z"/></svg>
+        </div>
+        <div class="tl-year">1876</div>
+        <div class="tl-name">Telephone</div>
+        <div class="tl-net">Networked Voice</div>
+      </div>
+      <div class="tl-node tl-energy">
+        <div class="tl-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-4 10.5c.8.7 1.3 1.6 1.5 2.5h5c.2-.9.7-1.8 1.5-2.5A6 6 0 0 0 12 3z"/><path d="M9 19h6"/><path d="M10 22h4"/></svg>
+        </div>
+        <div class="tl-year">1882</div>
+        <div class="tl-name">Electricity</div>
+        <div class="tl-net">Networked Energy</div>
+      </div>
+      <div class="tl-node tl-www">
+        <div class="tl-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/></svg>
+        </div>
+        <div class="tl-year">1991</div>
+        <div class="tl-name">World Wide Web</div>
+        <div class="tl-net">Networked Information</div>
+      </div>
+      <div class="tl-node tl-comm">
+        <div class="tl-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-5 4-9 9-9s9 4 9 9"/><path d="M3 14v4a2 2 0 0 0 2 2h2v-7H5a2 2 0 0 0-2 1z"/><path d="M21 14v4a2 2 0 0 1-2 2h-2v-7h2a2 2 0 0 1 2 1z"/></svg>
+        </div>
+        <div class="tl-year">1995</div>
+        <div class="tl-name">VoIP</div>
+        <div class="tl-net">Networked Communication</div>
+      </div>
+      <div class="tl-node tl-btc">
+        <div class="tl-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7v10M9.5 7h4.5a2.5 2.5 0 0 1 0 5H9.5M9.5 12h5a2.5 2.5 0 0 1 0 5H9.5"/><path d="M11 5v2M11 17v2M13 5v2M13 17v2"/></svg>
+        </div>
+        <div class="tl-year">2009</div>
+        <div class="tl-name">Bitcoin</div>
+        <div class="tl-net">Networked Trust</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION II · WHY OPEN PROTOCOLS WIN ────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="12" cy="12" r="2"/><path d="M12 7v3M10.5 13.5L6.5 17.5M13.5 13.5L17.5 17.5M7 19h10"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">II</span>Open Protocols Win</div>
+    </div>
+    <h2 class="section-h2">Neutrality is the ultimate scaling strategy.</h2>
+    <p class="section-lead">
+      In the 1980s, IBM, Microsoft, and AOL built walled gardens. They believed corporate users wanted "curated" safety. They were wrong. <strong><span class="tip" tabindex="0" data-tip="Transmission Control Protocol / Internet Protocol — the universal rule set that lets any computer move data across the internet, regardless of vendor.">TCP/IP</span> won because it didn't try to be a business — it became the air that all businesses breathe.</strong> When a protocol is <span class="tip" tabindex="0" data-tip="A system designed so it cannot favor any participant — even if its operators wanted it to. Credibility comes from incapacity, not promises.">credibly neutral</span>, it cannot discriminate even if it wanted to. That removes platform risk. Removing platform risk removes the incentive to fork. And growth compounds in one place instead of splintering into a thousand silos.
+    </p>
+
+    <!-- TOPOLOGY: centralized vs distributed -->
+    <div class="topology">
+      <div class="topo-card closed">
+        <div class="topo-label">Closed Network</div>
+        <h3 class="topo-h">Hub &amp; Spoke</h3>
+        <div class="topo-svg">
+          <svg viewBox="0 0 220 180" aria-hidden="true">
+            <!-- spokes -->
+            <g stroke="#00ff9d77" stroke-width="1.5">
+              <line x1="110" y1="90" x2="40" y2="40"/>
+              <line x1="110" y1="90" x2="180" y2="40"/>
+              <line x1="110" y1="90" x2="30" y2="90"/>
+              <line x1="110" y1="90" x2="190" y2="90"/>
+              <line x1="110" y1="90" x2="40" y2="140"/>
+              <line x1="110" y1="90" x2="180" y2="140"/>
+              <line x1="110" y1="90" x2="110" y2="20"/>
+              <line x1="110" y1="90" x2="110" y2="160"/>
+            </g>
+            <!-- peripheral nodes -->
+            <g fill="#1c1c20" stroke="#00ff9d" stroke-width="1.5">
+              <circle cx="40" cy="40" r="6"/>
+              <circle cx="180" cy="40" r="6"/>
+              <circle cx="30" cy="90" r="6"/>
+              <circle cx="190" cy="90" r="6"/>
+              <circle cx="40" cy="140" r="6"/>
+              <circle cx="180" cy="140" r="6"/>
+              <circle cx="110" cy="20" r="6"/>
+              <circle cx="110" cy="160" r="6"/>
+            </g>
+            <!-- center hub -->
+            <circle cx="110" cy="90" r="14" fill="#00ff9d55" stroke="#00ff9d" stroke-width="2"/>
+            <text x="110" y="94" text-anchor="middle" fill="#00ff9d" font-family="ui-monospace, monospace" font-size="9" font-weight="700">HUB</text>
+          </svg>
+        </div>
+        <p class="topo-cap">A central authority approves every transaction. Cut the hub and the network dies. Trust the keeper — or you don't play.</p>
+      </div>
+
+      <div class="topo-card open">
+        <div class="topo-label">Open Network</div>
+        <h3 class="topo-h">Peer-to-Peer Mesh</h3>
+        <div class="topo-svg">
+          <svg viewBox="0 0 220 180" aria-hidden="true">
+            <!-- mesh edges -->
+            <g stroke="#ff6b1a55" stroke-width="1.2">
+              <line x1="40" y1="40" x2="110" y2="30"/>
+              <line x1="110" y1="30" x2="180" y2="45"/>
+              <line x1="40" y1="40" x2="30" y2="100"/>
+              <line x1="180" y1="45" x2="190" y2="100"/>
+              <line x1="30" y1="100" x2="80" y2="120"/>
+              <line x1="190" y1="100" x2="140" y2="120"/>
+              <line x1="80" y1="120" x2="140" y2="120"/>
+              <line x1="80" y1="120" x2="110" y2="160"/>
+              <line x1="140" y1="120" x2="110" y2="160"/>
+              <line x1="40" y1="40" x2="80" y2="120"/>
+              <line x1="180" y1="45" x2="140" y2="120"/>
+              <line x1="110" y1="30" x2="110" y2="80"/>
+              <line x1="110" y1="80" x2="80" y2="120"/>
+              <line x1="110" y1="80" x2="140" y2="120"/>
+              <line x1="110" y1="80" x2="30" y2="100"/>
+              <line x1="110" y1="80" x2="190" y2="100"/>
+            </g>
+            <!-- nodes -->
+            <g fill="#1c1c20" stroke="#ff6b1a" stroke-width="1.5">
+              <circle cx="40" cy="40" r="6"/>
+              <circle cx="110" cy="30" r="6"/>
+              <circle cx="180" cy="45" r="6"/>
+              <circle cx="30" cy="100" r="6"/>
+              <circle cx="110" cy="80" r="7"/>
+              <circle cx="190" cy="100" r="6"/>
+              <circle cx="80" cy="120" r="6"/>
+              <circle cx="140" cy="120" r="6"/>
+              <circle cx="110" cy="160" r="6"/>
+            </g>
+          </svg>
+        </div>
+        <p class="topo-cap">Every node verifies. No node is necessary. Cut any one — the network keeps moving. <strong>Trust the math instead of the keeper.</strong></p>
+      </div>
+    </div>
+
+    <div class="equiv">
+      <div class="equiv-grid">
+        <div class="equiv-side info">
+          <div class="label">The Information Moment</div>
+          <p class="pname">TCP/IP</p>
+          <p class="pdesc">Standardized how we move <strong style="color:var(--text)">information</strong>.</p>
+        </div>
+        <div class="equiv-eq">≡</div>
+        <div class="equiv-side value">
+          <div class="label">The Value Moment</div>
+          <p class="pname">Bitcoin</p>
+          <p class="pdesc">Standardizes how we move <strong style="color:var(--text)">value</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STANDARD GAUGE RAILROAD VISUAL -->
+    <div class="gauge">
+      <div>
+        <div class="gauge-label">The Metaphor · Standard Gauge</div>
+        <h3 class="gauge-h">Why standardisation is the only thing that scales.</h3>
+        <p class="gauge-body">Before the 1880s, every U.S. railroad ran on its own track width. At every state line, cargo was unloaded, hauled across, and reloaded onto a different train. Slow, expensive, leaky. The industry didn't take off until the country agreed on <strong>one gauge: 4 ft 8½ in</strong>. <br><br>Bitcoin is the standard gauge for value. Same rails, anywhere on earth. No reloading. No middleman tax.</p>
+      </div>
+      <div class="gauge-svg">
+        <svg viewBox="0 0 360 200" aria-hidden="true">
+          <!-- Top: fragmented gauges -->
+          <text x="20" y="20" fill="#5a5a60" font-family="ui-monospace, monospace" font-size="9" letter-spacing="1.5">BEFORE · FRAGMENTED</text>
+
+          <!-- Three different gauges of track -->
+          <g stroke="#00ff9d" stroke-width="1.5" fill="none">
+            <!-- gauge A (narrow) -->
+            <line x1="25" y1="40" x2="100" y2="40"/>
+            <line x1="25" y1="48" x2="100" y2="48"/>
+            <line x1="30" y1="36" x2="30" y2="52"/>
+            <line x1="50" y1="36" x2="50" y2="52"/>
+            <line x1="70" y1="36" x2="70" y2="52"/>
+            <line x1="90" y1="36" x2="90" y2="52"/>
+            <!-- gap -->
+            <line x1="100" y1="44" x2="120" y2="44" stroke-dasharray="2 3"/>
+            <text x="110" y="60" text-anchor="middle" fill="#00ff9d" font-family="ui-monospace, monospace" font-size="8">offload</text>
+
+            <!-- gauge B (wide) -->
+            <line x1="125" y1="36" x2="225" y2="36"/>
+            <line x1="125" y1="52" x2="225" y2="52"/>
+            <line x1="130" y1="32" x2="130" y2="56"/>
+            <line x1="155" y1="32" x2="155" y2="56"/>
+            <line x1="180" y1="32" x2="180" y2="56"/>
+            <line x1="205" y1="32" x2="205" y2="56"/>
+            <!-- gap -->
+            <line x1="225" y1="44" x2="245" y2="44" stroke-dasharray="2 3"/>
+            <text x="235" y="60" text-anchor="middle" fill="#00ff9d" font-family="ui-monospace, monospace" font-size="8">offload</text>
+
+            <!-- gauge C -->
+            <line x1="250" y1="40" x2="335" y2="40"/>
+            <line x1="250" y1="48" x2="335" y2="48"/>
+            <line x1="255" y1="36" x2="255" y2="52"/>
+            <line x1="275" y1="36" x2="275" y2="52"/>
+            <line x1="295" y1="36" x2="295" y2="52"/>
+            <line x1="315" y1="36" x2="315" y2="52"/>
+          </g>
+
+          <!-- Divider -->
+          <line x1="20" y1="100" x2="340" y2="100" stroke="#34343a" stroke-dasharray="3 5"/>
+
+          <!-- Bottom: standard gauge -->
+          <text x="20" y="125" fill="#5a5a60" font-family="ui-monospace, monospace" font-size="9" letter-spacing="1.5">AFTER · STANDARD GAUGE</text>
+
+          <g stroke="#ff6b1a" stroke-width="1.8" fill="none">
+            <line x1="25" y1="148" x2="335" y2="148"/>
+            <line x1="25" y1="160" x2="335" y2="160"/>
+            <!-- ties -->
+            <g stroke-width="1.5">
+              <line x1="35" y1="144" x2="35" y2="164"/>
+              <line x1="65" y1="144" x2="65" y2="164"/>
+              <line x1="95" y1="144" x2="95" y2="164"/>
+              <line x1="125" y1="144" x2="125" y2="164"/>
+              <line x1="155" y1="144" x2="155" y2="164"/>
+              <line x1="185" y1="144" x2="185" y2="164"/>
+              <line x1="215" y1="144" x2="215" y2="164"/>
+              <line x1="245" y1="144" x2="245" y2="164"/>
+              <line x1="275" y1="144" x2="275" y2="164"/>
+              <line x1="305" y1="144" x2="305" y2="164"/>
+              <line x1="325" y1="144" x2="325" y2="164"/>
+            </g>
+          </g>
+
+          <!-- Train glyph -->
+          <g fill="#ff6b1a" stroke="#ff6b1a" stroke-width="1">
+            <rect x="160" y="130" width="44" height="14" rx="2" fill="#ff6b1a33"/>
+            <circle cx="170" cy="148" r="3" fill="#ff6b1a"/>
+            <circle cx="194" cy="148" r="3" fill="#ff6b1a"/>
+          </g>
+
+          <text x="180" y="184" text-anchor="middle" fill="#ff6b1a" font-family="ui-monospace, monospace" font-size="9" letter-spacing="1">ONE RAIL · GLOBAL · 24/7</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- STANDARDS BOOTSTRAP NETWORKS -->
+    <div class="gauge-expand">
+      <h4>Universal standards bootstrap networks. Always.</h4>
+      <p>The pattern is so consistent it is almost a physical law. A fragmented industry sits on incompatible interfaces. Then a universal standard emerges — owned by no one, used by everyone — and the friction collapses. Once friction collapses, the network grows <em>exponentially</em> instead of linearly.</p>
+      <p>None of these standards are <strong>businesses</strong>. They are <strong>rules</strong>: open, neutral, and identical everywhere. That's the whole trick.</p>
+      <ul class="standards-list">
+        <li><b>Shipping container</b>The same steel box moves on every ship, train, and truck on earth. Global trade became tractable.</li>
+        <li><b>TCP/IP</b>Stitched together a thousand military and academic intranets into the public internet.</li>
+        <li><b>HTTP</b>Made every webpage reachable from every browser, regardless of vendor.</li>
+        <li><b>USB</b>Collapsed dozens of incompatible peripheral connectors into one universal port.</li>
+      </ul>
+      <p style="margin-top:18px;">Money has never had a standard. Until <strong>Bitcoin</strong>.</p>
+    </div>
+
+    <!-- TOLLBOOTH: USD vs BTC RAILS -->
+    <div class="tollbooth">
+      <h4>The Toll Road vs. the Open Rail</h4>
+      <p class="tollbooth-sub">A typical international USD wire passes through 5–7 intermediaries before settling. Each stop is a fee, a delay, and a permission point — any one of them can stop the transaction. Bitcoin replaces all of that with a single rail.</p>
+
+      <!-- USD Rail -->
+      <div class="rail rail-usd">
+        <div class="rail-meta">
+          <span class="rail-pill">USD Rail</span>
+          <span class="rail-stat"><strong>5–7 intermediaries</strong> · <strong>2–5 days</strong> · <strong>3–7%</strong> total cost · banking hours only</span>
+        </div>
+        <div class="rail-track" role="list" aria-label="USD wire path">
+          <div class="rail-stop endpoint"><span class="dot"></span><b>Sender</b><i>origin</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>Sender's Bank</b><i>+ wire fee</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>Correspondent</b><i>+ fee</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>SWIFT</b><i>+ msg fee</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>FX Desk</b><i>+ spread</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>Correspondent</b><i>+ fee</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>Recipient Bank</b><i>+ fee</i></div>
+          <div class="rail-stop"><span class="dot"></span><b>AML / OFAC</b><i>review</i></div>
+          <div class="rail-stop endpoint"><span class="dot"></span><b>Recipient</b><i>destination</i></div>
+        </div>
+      </div>
+
+      <!-- BTC Rail -->
+      <div class="rail rail-btc">
+        <div class="rail-meta">
+          <span class="rail-pill">Bitcoin Rail</span>
+          <span class="rail-stat"><strong>0 intermediaries</strong> · <strong>~10 min</strong> confirmation · <strong>~$0.50</strong> network fee · 24/7/365</span>
+        </div>
+        <div class="rail-track" role="list" aria-label="Bitcoin path">
+          <div class="rail-stop endpoint"><span class="dot"></span><b>Sender</b><i>signs tx</i></div>
+          <div class="rail-stop wide"><span class="dot"></span><b>Bitcoin Network</b><i>peer-to-peer · proof-of-work</i></div>
+          <div class="rail-stop endpoint"><span class="dot"></span><b>Recipient</b><i>final settlement</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ptable">
+      <div class="ptable-row ptable-head">
+        <div>Feature</div>
+        <div class="col-info">Information Protocol · TCP/IP</div>
+        <div class="col-value">Monetary Protocol · Bitcoin</div>
+      </div>
+      <div class="ptable-row">
+        <div>Problem</div>
+        <div class="cell-info">Fragmented private digital silos.</div>
+        <div>Centrally managed, inflationary fiat.</div>
+      </div>
+      <div class="ptable-row">
+        <div>Solution</div>
+        <div class="cell-info">A shared rule set for packet switching.</div>
+        <div>A shared rule set for ledger consensus.</div>
+      </div>
+      <div class="ptable-row">
+        <div>Source of Truth</div>
+        <div class="cell-info">Mathematical confirmation of packet integrity.</div>
+        <div>Mathematical confirmation of the longest chain.</div>
+      </div>
+      <div class="ptable-row">
+        <div>Accessibility</div>
+        <div class="cell-info">Open source. <span class="tip" tabindex="0" data-tip="Anyone can participate without applying, registering, or asking permission from a gatekeeper. The system doesn't know your name and doesn't care.">Permissionless</span>. Anyone with a modem.</div>
+        <div>Open source. Permissionless. Anyone with a node.</div>
+      </div>
+      <div class="ptable-row">
+        <div>Final Output</div>
+        <div class="cell-info">Instant communication. No reassembly errors.</div>
+        <div>Final settlement. No chargebacks. No reversal.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION III · THE STACK ────────────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,3 21,7.5 12,12 3,7.5"/><polyline points="3,12 12,16.5 21,12"/><polyline points="3,16.5 12,21 21,16.5"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">III</span>The Stack</div>
+    </div>
+    <h2 class="section-h2">Both technologies follow a layered architecture.</h2>
+    <p class="section-lead">
+      You don't use the base layer of TCP/IP directly when you send an email — your client speaks SMTP, which rides on top. Bitcoin works the same way. The <strong>base layer settles</strong>. The <strong>application layer scales</strong>.
+    </p>
+
+    <div class="stack-grid">
+      <div class="stack-col info">
+        <div class="stack-label">Information Stack</div>
+        <h3 class="stack-h">TCP/IP</h3>
+        <p class="stack-sub">Packets in. Information out.</p>
+        <div class="stack-layer">
+          <span class="stack-tier">App</span>
+          <span class="stack-name">Email · Web · Streaming · APIs</span>
+        </div>
+        <div class="stack-layer">
+          <span class="stack-tier">Transport</span>
+          <span class="stack-name">HTTP · SMTP · WebSockets</span>
+        </div>
+        <div class="stack-layer base">
+          <span class="stack-tier">Base</span>
+          <span class="stack-name">TCP/IP — packet switching, addressing</span>
+        </div>
+      </div>
+
+      <div class="stack-col value">
+        <div class="stack-label">Value Stack</div>
+        <h3 class="stack-h">Bitcoin</h3>
+        <p class="stack-sub">Energy in. Final settlement out.</p>
+        <div class="stack-layer">
+          <span class="stack-tier">App</span>
+          <span class="stack-name">Wallets · Strike · Cash App · Custody</span>
+        </div>
+        <div class="stack-layer">
+          <span class="stack-tier"><span class="tip" tabindex="0" data-tip="Layer 2: a protocol built on top of a base blockchain to scale capacity, add features, or speed up transactions without changing the base.">L2</span></span>
+          <span class="stack-name"><span class="tip" tabindex="0" data-tip="Bitcoin's layer-2 payment network. Near-instant, near-free transactions that periodically settle to the base chain.">Lightning Network</span> · Liquid · <span class="tip" tabindex="0" data-tip="Separate blockchains pegged to Bitcoin. Used to add features (privacy, speed) without changing the base protocol.">Sidechains</span></span>
+        </div>
+        <div class="stack-layer base">
+          <span class="stack-tier">Base</span>
+          <span class="stack-name">Bitcoin — <span class="tip" tabindex="0" data-tip="Bitcoin's consensus mechanism. Miners spend physical energy to add blocks, making it economically irrational to lie about the ledger.">proof-of-work</span>, distributed ledger</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION IV · GLASS CLOCK ───────────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 16,14"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">IV</span>The Ah-Hah Moment</div>
+    </div>
+    <h2 class="section-h2">The Black Box vs. the Glass Clock.</h2>
+    <p class="section-lead">
+      Imagine the global financial system as a clock. In the old system, the gears are hidden — and occasionally, the keeper moves the hands to suit a political need. In the new system, the gears sit in the town square, made of crystal. Everyone can see them. No one can touch them.
+    </p>
+
+    <div class="clock-grid">
+
+      <!-- BLACK BOX -->
+      <div class="clock-card closed">
+        <div class="clock-label">The Old System · Fiat</div>
+        <h3 class="clock-h">The Black Box Clock</h3>
+        <p class="clock-sub">A clock where the gears are hidden. Occasionally, the person holding it moves the hands to suit political needs. You cannot see why. You cannot stop it.</p>
+
+        <div class="clock-viz">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-hidden="true">
+            <circle cx="100" cy="100" r="80" fill="#1c1c20" stroke="#34343a" stroke-width="2"/>
+            <circle cx="100" cy="100" r="64" fill="#0a0a0c"/>
+            <!-- "broken" tick marks suggesting interference -->
+            <g stroke="#5a5a60" stroke-width="2">
+              <line x1="100" y1="40" x2="100" y2="48"/>
+              <line x1="160" y1="100" x2="152" y2="100"/>
+              <line x1="100" y1="160" x2="100" y2="152"/>
+              <line x1="40" y1="100" x2="48" y2="100"/>
+            </g>
+            <!-- Hands skewed; one with red dashed showing manipulation -->
+            <line x1="100" y1="100" x2="100" y2="58" stroke="#c5c5cc" stroke-width="3" stroke-linecap="round"/>
+            <line x1="100" y1="100" x2="138" y2="100" stroke="#00ff9d" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 3"/>
+            <circle cx="100" cy="100" r="5" fill="#00ff9d"/>
+            <!-- "?" overlay suggesting opacity -->
+            <text x="100" y="135" text-anchor="middle" fill="#00ff9d" font-family="monospace" font-size="14" font-weight="700">?</text>
+          </svg>
+        </div>
+
+        <ul class="clock-list">
+          <li>Rules can be rewritten by a referee mid-match.</li>
+          <li>Supply expands to solve someone else's debt problem.</li>
+          <li>Trust is required because verification is impossible.</li>
+        </ul>
+      </div>
+
+      <!-- GLASS CLOCK -->
+      <div class="clock-card open">
+        <div class="clock-label">The New System · Bitcoin</div>
+        <h3 class="clock-h">The Glass Clock</h3>
+        <p class="clock-sub">A transparent crystal clock in the town square. Everyone can see the gears. No one can touch them. The mechanism turns according to mathematics — not policy.</p>
+
+        <div class="clock-viz">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-hidden="true">
+            <defs>
+              <radialGradient id="glass" cx="35%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#ff6b1a30"/>
+                <stop offset="100%" stop-color="#ff6b1a05"/>
+              </radialGradient>
+            </defs>
+            <circle cx="100" cy="100" r="80" fill="url(#glass)" stroke="#ff6b1a" stroke-width="2"/>
+            <!-- inner gears (visible) -->
+            <circle cx="100" cy="100" r="64" fill="none" stroke="#ff6b1a" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
+            <circle cx="100" cy="100" r="48" fill="none" stroke="#ff6b1a" stroke-width="1" opacity="0.4"/>
+            <!-- gear teeth -->
+            <g stroke="#ff6b1a" stroke-width="2" opacity="0.7">
+              <line x1="100" y1="36" x2="100" y2="50"/>
+              <line x1="164" y1="100" x2="150" y2="100"/>
+              <line x1="100" y1="164" x2="100" y2="150"/>
+              <line x1="36" y1="100" x2="50" y2="100"/>
+              <line x1="145" y1="55" x2="138" y2="62"/>
+              <line x1="145" y1="145" x2="138" y2="138"/>
+              <line x1="55" y1="145" x2="62" y2="138"/>
+              <line x1="55" y1="55" x2="62" y2="62"/>
+            </g>
+            <!-- precise hands -->
+            <line x1="100" y1="100" x2="100" y2="52" stroke="#ededed" stroke-width="3" stroke-linecap="round"/>
+            <line x1="100" y1="100" x2="142" y2="100" stroke="#ff6b1a" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="5" fill="#ff6b1a"/>
+            <!-- "21M" stamped on the face -->
+            <text x="100" y="138" text-anchor="middle" fill="#ff6b1a" font-family="ui-monospace, monospace" font-size="11" font-weight="700" letter-spacing="1">21M</text>
+          </svg>
+        </div>
+
+        <ul class="clock-list">
+          <li>Rules are written in code. The referee is mathematics.</li>
+          <li>Supply is fixed at 21,000,000. Forever.</li>
+          <li>Don't trust. Verify — by running a node yourself.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── SECTION V · GAME THEORY ────────────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l1 4-2 1v6l2 1v3H8v-3l2-1V9L8 8z"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">V</span>The Game Theory of Business</div>
+    </div>
+    <h2 class="section-h2">Two games. Two rulebooks. One choice.</h2>
+    <p class="section-lead">
+      Every corporate balance sheet is a player in a game. The question isn't whether you're playing — it's <strong>which game you've chosen.</strong>
+    </p>
+
+    <div class="game-table">
+      <div class="game-row head">
+        <div>Game Element</div>
+        <div class="old">The Old Game · Fiat</div>
+        <div class="new">The New Game · Bitcoin</div>
+      </div>
+      <div class="game-row">
+        <div>The Referee</div>
+        <div class="cell-old">Central banks &amp; politicians.</div>
+        <div>Universal mathematics.</div>
+      </div>
+      <div class="game-row">
+        <div>The Rulebook</div>
+        <div class="cell-old">1,000+ pages of changing regulation.</div>
+        <div>One line of code: <strong class="num">21,000,000</strong>.</div>
+      </div>
+      <div class="game-row">
+        <div>Transparency</div>
+        <div class="cell-old">"Trust us, we're auditing it."</div>
+        <div>"Don't trust. Verify it yourself."</div>
+      </div>
+      <div class="game-row">
+        <div>Settlement</div>
+        <div class="cell-old">3 days · 3% fees · reversible.</div>
+        <div>Minutes · pennies · final.</div>
+      </div>
+      <div class="game-row">
+        <div>Corporate Risk</div>
+        <div class="cell-old"><span class="tip" tabindex="0" data-tip="The risk that the institution on the other side of your contract — a bank, a broker, a clearinghouse — fails to deliver what was promised.">Counterparty risk</span> &amp; <span class="tip" tabindex="0" data-tip="Reducing a currency's value by creating more units of it. The historical default of every fiat regime.">debasement</span>.</div>
+        <div>Volatility (price) vs. certainty (supply).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION VI · UNBREAKABLES ──────────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><polyline points="9,12 11,14 15,10"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">VI</span>The Three Unbreakables</div>
+    </div>
+    <h2 class="section-h2">Why this is a paradigm shift, not an upgrade.</h2>
+    <p class="section-lead">
+      Three properties of the protocol that have never co-existed in a single asset before. Each one alone would be remarkable. Together, they form the foundation of digital sovereignty.
+    </p>
+
+    <div class="ub-grid">
+      <div class="ub-card">
+        <div class="ub-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,3 20,9 17,21 7,21 4,9"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="9" y1="9" x2="12" y2="3"/><line x1="15" y1="9" x2="12" y2="3"/><line x1="9" y1="9" x2="12" y2="21"/><line x1="15" y1="9" x2="12" y2="21"/></svg>
+        </div>
+        <div class="ub-num">01 · Scarcity</div>
+        <h3 class="ub-h">Unbreakable Supply</h3>
+        <p class="ub-body">If the price of gold goes up, we dig more gold. If demand for fiat rises, central banks print more. <strong>In Bitcoin, demand cannot summon supply.</strong> It is the first <span class="tip" tabindex="0" data-tip="Inelastic supply: quantity doesn't expand when demand rises. Bitcoin is the first asset where this holds perfectly — no matter the price, no extra coins appear.">perfectly inelastic</span> asset in history.</p>
+      </div>
+      <div class="ub-card">
+        <div class="ub-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="6" height="6" rx="1"/><rect x="9" y="12" width="6" height="6" rx="1"/><rect x="15" y="6" width="6" height="6" rx="1"/><line x1="6" y1="12" x2="6" y2="14"/><line x1="6" y1="14" x2="9" y2="14"/><line x1="18" y1="12" x2="18" y2="14"/><line x1="18" y1="14" x2="15" y2="14"/></svg>
+        </div>
+        <div class="ub-num">02 · Memory</div>
+        <h3 class="ub-h">Unbreakable Ledger</h3>
+        <p class="ub-body">A perfect, public, <span class="tip" tabindex="0" data-tip="A ledger you can add to but never modify or delete. Every entry is permanent. The historical record cannot be rewritten.">append-only</span> memory. Transactions cannot be erased, edited, or forged. <strong>For a corporation, this is the ultimate single source of truth</strong> — auditable by anyone, owned by no one.</p>
+      </div>
+      <div class="ub-card">
+        <div class="ub-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14" r="4"/><line x1="11" y1="11" x2="20" y2="2"/><line x1="17" y1="5" x2="20" y2="8"/><line x1="14" y1="8" x2="17" y2="11"/></svg>
+        </div>
+        <div class="ub-num">03 · Access</div>
+        <h3 class="ub-h">Unbreakable Entry</h3>
+        <p class="ub-body">You don't <em>open an account</em> with Bitcoin — you <em>discover a key</em>. <strong>No invitation, no gatekeeper, no jurisdiction.</strong> If you have an internet connection, you have the same access as the largest bank on earth.</p>
+      </div>
+    </div>
+
+    <!-- ENERGY ANCHOR VISUAL -->
+    <div class="anchor">
+      <div class="anchor-svg">
+        <svg viewBox="0 0 480 180" aria-hidden="true">
+          <!-- ENERGY · single lightning bolt in a circle -->
+          <g>
+            <text x="60" y="20" text-anchor="middle" fill="#5a5a60" font-family="ui-monospace, monospace" font-size="10" letter-spacing="1.5">PHYSICAL ENERGY</text>
+            <!-- circle frame -->
+            <circle cx="60" cy="78" r="36" fill="#fbbf2410" stroke="#fbbf24" stroke-width="2"/>
+            <!-- single bolt centered -->
+            <polygon points="56,58 70,58 62,76 73,76 54,102 62,82 49,82"
+                     fill="#fbbf24" stroke="#fbbf24" stroke-width="1" stroke-linejoin="round"/>
+            <text x="60" y="150" text-anchor="middle" fill="#8a8a90" font-family="ui-monospace, monospace" font-size="10">PROOF OF WORK</text>
+          </g>
+
+          <!-- Arrow from energy to block -->
+          <g stroke="#fbbf24" stroke-width="1.5" fill="none">
+            <line x1="105" y1="85" x2="180" y2="85" stroke-dasharray="4 4"/>
+            <polyline points="172,80 182,85 172,90" stroke-linejoin="round"/>
+          </g>
+
+          <!-- BLOCK · cyan -->
+          <g>
+            <rect x="190" y="50" width="100" height="80" rx="6" fill="#00d4ff15" stroke="#00d4ff" stroke-width="2"/>
+            <!-- block contents - hash lines -->
+            <g stroke="#00d4ff" stroke-width="1" opacity="0.7">
+              <line x1="200" y1="64" x2="280" y2="64"/>
+              <line x1="200" y1="74" x2="280" y2="74"/>
+              <line x1="200" y1="84" x2="280" y2="84"/>
+              <line x1="200" y1="94" x2="265" y2="94"/>
+              <line x1="200" y1="104" x2="280" y2="104"/>
+              <line x1="200" y1="114" x2="270" y2="114"/>
+            </g>
+            <text x="240" y="42" text-anchor="middle" fill="#00d4ff" font-family="ui-monospace, monospace" font-size="10" font-weight="700" letter-spacing="2">BLOCK</text>
+            <text x="240" y="148" text-anchor="middle" fill="#8a8a90" font-family="ui-monospace, monospace" font-size="10">SEALED IN MATH</text>
+          </g>
+
+          <!-- Arrow from block to truth -->
+          <g stroke="#ff6b1a" stroke-width="1.5" fill="none">
+            <line x1="300" y1="85" x2="365" y2="85" stroke-dasharray="4 4"/>
+            <polyline points="357,80 367,85 357,90" stroke-linejoin="round"/>
+          </g>
+
+          <!-- TRUTH · orange -->
+          <g>
+            <text x="420" y="20" text-anchor="middle" fill="#5a5a60" font-family="ui-monospace, monospace" font-size="10" letter-spacing="1.5">DIGITAL TRUTH</text>
+            <!-- shield -->
+            <path d="M 420 50 L 450 60 L 450 95 Q 450 115 420 130 Q 390 115 390 95 L 390 60 Z"
+                  fill="#ff6b1a15" stroke="#ff6b1a" stroke-width="2"/>
+            <polyline points="405,90 415,100 435,80" fill="none" stroke="#ff6b1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="420" y="150" text-anchor="middle" fill="#8a8a90" font-family="ui-monospace, monospace" font-size="10">IMMUTABLE</text>
+          </g>
+        </svg>
+      </div>
+      <p class="anchor-cap"><strong>The Energy Anchor.</strong> Every Bitcoin block is a quantity of physical energy converted into a digital fact. You can't print energy. You can't fake thermodynamics. Truth becomes a function of the universe — not a vote.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION VII · NEUTRALITY CHARTS ────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="11" width="3" height="9"/><rect x="11" y="6" width="3" height="14"/><rect x="16" y="14" width="3" height="6"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">VII</span>Why Neutrality Scales</div>
+    </div>
+    <h2 class="section-h2">Four charts. One thesis.</h2>
+    <p class="section-lead">
+      Neutrality isn't a moral stance — it's an economic one. By removing the ability to discriminate, you remove the incentive to fork. Below: the structural advantages that closed networks can never replicate.
+    </p>
+
+    <div class="charts-grid">
+
+      <!-- CHART 1 — Trust Curve -->
+      <div class="chart-card">
+        <div class="chart-num">Chart 01</div>
+        <h3 class="chart-h">The Ecosystem Trust Curve</h3>
+        <p class="chart-sub">Closed networks plateau as developers fear platform risk. Neutral networks compound.</p>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 320 180" aria-hidden="true">
+            <!-- axes -->
+            <line x1="40" y1="20" x2="40" y2="155" stroke="#34343a" stroke-width="1"/>
+            <line x1="40" y1="155" x2="305" y2="155" stroke="#34343a" stroke-width="1"/>
+            <text x="40" y="170" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace">TIME →</text>
+            <text x="14" y="22" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace">USERS</text>
+            <!-- Closed network — plateau -->
+            <path d="M 40 145 Q 100 130, 140 110 T 200 95 L 305 92" fill="none" stroke="#00ff9d" stroke-width="2.5"/>
+            <!-- Neutral network — exponential -->
+            <path d="M 40 148 Q 130 140, 180 120 T 240 80 Q 270 50, 305 25" fill="none" stroke="#ff6b1a" stroke-width="2.5"/>
+            <!-- end labels -->
+            <circle cx="305" cy="92" r="3" fill="#00ff9d"/>
+            <circle cx="305" cy="25" r="3" fill="#ff6b1a"/>
+          </svg>
+        </div>
+        <div class="chart-legend">
+          <span><i style="background:var(--c-closed)"></i>Closed / gated</span>
+          <span><i style="background:var(--c-open)"></i>Neutral / open</span>
+        </div>
+      </div>
+
+      <!-- CHART 2 — Friction vs Innovation -->
+      <div class="chart-card">
+        <div class="chart-num">Chart 02</div>
+        <h3 class="chart-h">Friction vs. Permissionless Innovation</h3>
+        <p class="chart-sub">Governance hurdles are inversely proportional to deployment velocity.</p>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 320 180" aria-hidden="true">
+            <!-- bars: closed (high friction, low innovation) -->
+            <text x="60" y="170" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace" text-anchor="middle">CLOSED</text>
+            <text x="180" y="170" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace" text-anchor="middle">NEUTRAL</text>
+            <text x="14" y="40" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace">FRICTION</text>
+            <text x="14" y="125" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace">INNOVATION</text>
+
+            <!-- Closed: high friction (top), low innovation (bottom) -->
+            <rect x="38" y="40" width="44" height="50" fill="#00ff9d55" stroke="#00ff9d" stroke-width="1.5"/>
+            <rect x="38" y="125" width="44" height="20" fill="#00ff9d55" stroke="#00ff9d" stroke-width="1.5"/>
+
+            <!-- Neutral: low friction (top), high innovation (bottom) -->
+            <rect x="158" y="78" width="44" height="12" fill="#ff6b1a55" stroke="#ff6b1a" stroke-width="1.5"/>
+            <rect x="158" y="55" width="44" height="90" fill="#ff6b1a55" stroke="#ff6b1a" stroke-width="1.5"/>
+
+            <!-- divider -->
+            <line x1="120" y1="30" x2="120" y2="150" stroke="#34343a" stroke-dasharray="2 4"/>
+          </svg>
+        </div>
+        <div class="chart-legend">
+          <span><i style="background:var(--c-closed)"></i>Closed</span>
+          <span><i style="background:var(--c-open)"></i>Neutral</span>
+        </div>
+      </div>
+
+      <!-- CHART 3 — Network Effect -->
+      <div class="chart-card">
+        <div class="chart-num">Chart 03</div>
+        <h3 class="chart-h"><span class="tip" tabindex="0" data-tip="A property where a system cannot favor any participant — even if it wanted to. The protocol earns trust from all sides because it can't betray any side.">Credible Neutrality</span> &amp; <span class="tip" tabindex="0" data-tip="Metcalfe's Law: a network's value scales with the square of its users. Doubling users quadruples the value.">Network Effects</span></h3>
+        <p class="chart-sub">Value of a network = n². Neutrality lets <em>n</em> grow toward the total addressable population.</p>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 320 180" aria-hidden="true">
+            <line x1="40" y1="20" x2="40" y2="155" stroke="#34343a" stroke-width="1"/>
+            <line x1="40" y1="155" x2="305" y2="155" stroke="#34343a" stroke-width="1"/>
+            <text x="40" y="170" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace">USERS (n) →</text>
+            <text x="14" y="22" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace">VALUE</text>
+            <!-- linear (closed, fragments) -->
+            <path d="M 40 152 L 305 100" fill="none" stroke="#00ff9d" stroke-width="2.5"/>
+            <!-- quadratic (neutral n²) -->
+            <path d="M 40 152 Q 200 150, 305 22" fill="none" stroke="#ff6b1a" stroke-width="2.5"/>
+            <text x="270" y="95" fill="#00ff9d" font-size="9" font-family="ui-monospace, monospace">linear</text>
+            <text x="245" y="40" fill="#ff6b1a" font-size="9" font-family="ui-monospace, monospace">n²</text>
+          </svg>
+        </div>
+        <div class="chart-legend">
+          <span><i style="background:var(--c-closed)"></i>Closed (linear)</span>
+          <span><i style="background:var(--c-open)"></i>Neutral (n²)</span>
+        </div>
+      </div>
+
+      <!-- CHART 4 — Fat Protocols -->
+      <div class="chart-card">
+        <div class="chart-num">Chart 04</div>
+        <h3 class="chart-h">Where Value Accrues · <span class="tip" tabindex="0" data-tip="Theory that in open networks, the protocol layer captures more value than the apps built on top — the inverse of how Web 2.0 worked.">Fat Protocol</span> Theory</h3>
+        <p class="chart-sub">Closed: apps capture value, protocol is a cost center. Neutral: protocol layer captures the aggregate.</p>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 320 180" aria-hidden="true">
+            <!-- Left stack: closed -->
+            <text x="70" y="20" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace" text-anchor="middle">CLOSED · "FAT APPS"</text>
+            <rect x="30" y="30" width="80" height="80" fill="#00ff9d55" stroke="#00ff9d" stroke-width="1.5"/>
+            <text x="70" y="74" fill="#00ff9d" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle" font-weight="700">APPS</text>
+            <rect x="30" y="115" width="80" height="20" fill="#00ff9d22" stroke="#00ff9d" stroke-width="1.5"/>
+            <text x="70" y="129" fill="#c5c5cc" font-size="9" font-family="ui-monospace, monospace" text-anchor="middle">protocol</text>
+
+            <!-- Right stack: neutral -->
+            <text x="240" y="20" fill="#5a5a60" font-size="9" font-family="ui-monospace, monospace" text-anchor="middle">NEUTRAL · "FAT PROTOCOL"</text>
+            <rect x="200" y="30" width="80" height="20" fill="#ff6b1a22" stroke="#ff6b1a" stroke-width="1.5"/>
+            <text x="240" y="44" fill="#c5c5cc" font-size="9" font-family="ui-monospace, monospace" text-anchor="middle">apps</text>
+            <rect x="200" y="55" width="80" height="80" fill="#ff6b1a55" stroke="#ff6b1a" stroke-width="1.5"/>
+            <text x="240" y="100" fill="#ff6b1a" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle" font-weight="700">PROTOCOL</text>
+
+            <line x1="160" y1="20" x2="160" y2="150" stroke="#34343a" stroke-dasharray="2 4"/>
+          </svg>
+        </div>
+        <div class="chart-legend">
+          <span><i style="background:var(--c-closed)"></i>App-layer capture</span>
+          <span><i style="background:var(--c-open)"></i>Protocol-layer capture</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── SECTION VIII · PULL QUOTE ──────────────────────── -->
+  <section class="section">
+    <div class="sec-head">
+      <span class="sec-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><polyline points="14,3 14,8 19,8"/><line x1="10" y1="13" x2="16" y2="13"/><line x1="10" y1="16" x2="16" y2="16"/></svg>
+      </span>
+      <div class="section-title"><span class="num-roman">VIII</span>The Whitepaper</div>
+    </div>
+    <h2 class="section-h2">The original problem statement.</h2>
+    <p class="section-lead">
+      Sixteen years ago, an anonymous author published nine pages of math and game theory that quietly named the problem the entire global financial system had been pretending wasn't there.
+    </p>
+
+    <blockquote class="pullquote">
+      <q>The root problem with conventional currency is all the trust that's required to make it work. The central bank must be trusted not to debase the currency, but the history of fiat currencies is full of breaches of that trust.</q>
+      <cite>— Satoshi Nakamoto · Bitcoin: A Peer-to-Peer Electronic Cash System · 2008</cite>
+    </blockquote>
+  </section>
+
+  <!-- ─── CLOSING ────────────────────────────────────────── -->
+  <section class="closing">
+    <h3>The network is open. The rules are set.</h3>
+    <p>You wouldn't run your global communications on a fragmented, proprietary network that costs 3% to use and lets your messages be undone. The question for the modern treasurer is whether you can afford to manage your reserves that way.</p>
+
+    <div class="nvs">
+      <div class="nvs-card spec">
+        <div class="nvs-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg>
+        </div>
+        <div class="nvs-label">Spectator</div>
+      </div>
+      <div class="nvs-card node">
+        <div class="nvs-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="5" x2="10" y2="11"/><line x1="18" y1="5" x2="14" y2="11"/><line x1="6" y1="19" x2="10" y2="13"/><line x1="18" y1="19" x2="14" y2="13"/></svg>
+        </div>
+        <div class="nvs-label">Node</div>
+      </div>
+    </div>
+
+    <div class="kicker">Will you be a <span class="tip" tabindex="0" data-tip="A computer running Bitcoin software. It validates every transaction independently and keeps a full copy of the ledger. Don't trust — verify.">node</span> — or just a spectator?</div>
+  </section>
+
+  <footer>
+    <span>Bitcoin, Networks &amp; the Balance Sheet Singularity</span>
+    <span class="mono">v1 · draft</span>
+  </footer>
+
+</div>
+</body>
+</html>
