@@ -1802,6 +1802,64 @@
   }
   .vacuum-callout p strong { color: var(--text); font-weight: 600; }
 
+  /* ─── NETWORK DETAIL (per-network deep-dives in §I) ───── */
+  .network-detail {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+    max-width: 760px;
+  }
+  .network-detail::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 56px;
+    height: 2px;
+    background: var(--nd-color, var(--c-value));
+  }
+  .network-detail:first-of-type { margin-top: 56px; }
+  .nd-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .nd-year {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--nd-color, var(--c-value));
+  }
+  .nd-name {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .nd-tag {
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-left: auto;
+  }
+  .nd-intro {
+    margin-top: 56px;
+    margin-bottom: 0;
+  }
+  @media (max-width: 640px) {
+    .nd-name { font-size: 24px; }
+    .nd-tag { margin-left: 0; }
+    .network-detail { padding: 32px 0; }
+  }
+
   /* ─── FORCES VIZ (Weather of Money) ──────────────────── */
   .forces-viz {
     background: var(--panel);
@@ -2062,6 +2120,85 @@
         <div class="tl-year">2009</div>
         <div class="tl-name">Bitcoin</div>
         <div class="tl-net">Networked Trust</div>
+      </div>
+    </div>
+
+    <div class="prose nd-intro">
+      <p class="lead">Each of the five networks below removed a different kind of friction from human life. Each took a generation to be fully understood. Each one made the next possible. Bitcoin sits at the end of that line — and the corporation that learns to read the pattern stops being surprised by what is coming next.</p>
+    </div>
+
+    <!-- TELEPHONE -->
+    <div class="network-detail" style="--nd-color: #ff6090;">
+      <div class="nd-header">
+        <span class="nd-year">1876</span>
+        <h3 class="nd-name">The Telephone</h3>
+        <span class="nd-tag">Networked Voice</span>
+      </div>
+      <div class="prose">
+        <p>Before 1876, the fastest way to send a message at distance was the telegraph — letters of dots and dashes encoded by an operator, transmitted by wire, decoded by another operator, then hand-carried to the recipient. Two human translators stood between every sender and every receiver in the world.</p>
+        <p>Alexander Graham Bell collapsed that. The telephone removed the <em>operator</em>. Communication no longer required a translator at each end of the wire — the sender's voice and the receiver's ear became the entire system. The leap was not speed. The telegraph was already fast. The leap was <strong>directness</strong>.</p>
+        <p>Bitcoin removes the operator from value transfer the same way. Before Bitcoin, sending money meant encoding a request to a bank, having a human or algorithm at the other end approve it, then having a second bank credit the recipient. Bitcoin replaces all of that with a single act: the sender signs, the protocol verifies, the recipient receives. No translators required.</p>
+      </div>
+    </div>
+
+    <!-- ELECTRICITY -->
+    <div class="network-detail" style="--nd-color: #fbbf24;">
+      <div class="nd-header">
+        <span class="nd-year">1882</span>
+        <h3 class="nd-name">Electricity</h3>
+        <span class="nd-tag">Networked Energy</span>
+      </div>
+      <div class="prose">
+        <p>Thomas Edison opened Pearl Street Station in lower Manhattan on September 4, 1882. Eighty-five customers, one coal-fired generator. It was the first time in human history that energy could be <em>delivered</em> — produced in one place and used somewhere else, on demand, by anyone connected to the grid. Before Pearl Street, every factory, every home, every farm generated its own power locally. Production and consumption happened in the same building.</p>
+        <p>The grid removed <em>colocation</em>. Energy no longer had to be created where it was used. That single decoupling — production from consumption — is what made the modern industrial city possible. The skyscraper is not a feat of architecture. It is a feat of the grid.</p>
+        <p>Bitcoin decouples value from custody the way the grid decoupled energy from generation. Before Bitcoin, holding capital meant trusting whoever was holding it for you. The custodian and the asset were the same thing. Bitcoin separates them: the protocol holds the asset, you hold the keys, and the custodian becomes optional. <strong>Capital can move where it is needed without asking the previous holder for permission.</strong></p>
+      </div>
+    </div>
+
+    <!-- WORLD WIDE WEB -->
+    <div class="network-detail" style="--nd-color: #00d4ff;">
+      <div class="nd-header">
+        <span class="nd-year">1991</span>
+        <h3 class="nd-name">The World Wide Web</h3>
+        <span class="nd-tag">Networked Information</span>
+      </div>
+      <div class="prose">
+        <p>Tim Berners-Lee served the first web page from a NeXT computer at CERN in August 1991. The internet had existed since the late 1960s. What was new was the <em>web</em> — a way of linking documents across any computer, in any country, with no central directory and no permission required. The browser became the only piece of software anyone needed to read the entire output of human civilization.</p>
+        <p>The web removed <em>gatekeepers from information</em>. Until 1991, publishing meant convincing a printer, a publisher, a TV network, or a government that what you had to say was worth their bandwidth. The web removed the filter. Anyone with a connection could publish. Anyone with a browser could read.</p>
+        <p>Bitcoin does the same thing for value. Until 2009, transmitting money meant convincing a bank, a payment processor, or a regulator that what you wanted to do was worth their bandwidth. Bitcoin removed the filter. <strong>The web democratized information. Bitcoin democratizes value.</strong></p>
+      </div>
+    </div>
+
+    <!-- VOIP -->
+    <div class="network-detail" style="--nd-color: #a855f7;">
+      <div class="nd-header">
+        <span class="nd-year">1995</span>
+        <h3 class="nd-name">VoIP</h3>
+        <span class="nd-tag">Networked Communication</span>
+      </div>
+      <div class="prose">
+        <p>In February 1995, an Israeli startup called VocalTec released InternetPhone — the first software that turned a personal computer into a long-distance call station, routed over TCP/IP instead of telephone wires. A New York–to–Tel Aviv call cost roughly two dollars a minute on AT&amp;T's circuit-switched network. On VocalTec, the same call cost the price of an internet connection: effectively zero.</p>
+        <p>VoIP collapsed <em>the cost of distance</em>. Geography stopped being a billable line item on a phone bill. The telecoms didn't just lose revenue — they lost the ability to <em>price by distance at all</em>. By 2010, the entire long-distance industry was a vestigial limb.</p>
+        <p>Bitcoin and the Lightning Network do the same thing for cross-border payment. SWIFT and correspondent banking still price money movement by distance — by jurisdiction, by counterparty, by FX desk. Lightning collapses all of that. Sending one dollar across the planet costs the same as sending a million across the street: a few cents, in seconds. <strong>The cost of distance, once again, becomes zero.</strong></p>
+      </div>
+    </div>
+
+    <blockquote class="pull-quote-lg">
+      <q>Each of the first four networks removed a friction. The fifth removes a precondition.</q>
+      <cite>The Civilizational Pattern</cite>
+    </blockquote>
+
+    <!-- BITCOIN -->
+    <div class="network-detail" style="--nd-color: #ff6b1a;">
+      <div class="nd-header">
+        <span class="nd-year">2009</span>
+        <h3 class="nd-name">Bitcoin</h3>
+        <span class="nd-tag">Networked Trust</span>
+      </div>
+      <div class="prose">
+        <p>On January 3, 2009, an anonymous person or group calling themselves Satoshi Nakamoto mined the first block of the Bitcoin blockchain. Embedded in the block was a headline from that day's <em>London Times</em>: <strong>"Chancellor on brink of second bailout for banks."</strong> A thesis statement disguised as a timestamp.</p>
+        <p>Bitcoin removes <em>trust as a precondition for transaction</em>. Before 2009, every exchange of value at distance required at least one trusted third party — a bank, a broker, a settlement house, a government. Bitcoin proved, with mathematics, that two strangers could exchange final value across any distance with no third party at all. <strong>Trust became a math problem instead of a relationship.</strong></p>
+        <p>This is not analogous to anything earlier. The previous four networks delivered things humans had been doing for millennia — talking, lighting, reading, calling — they just removed friction from each. Bitcoin networks something humans had never been able to do at all: exchange value globally without trusting anyone. It is the first network with no precedent. That is why it is the fifth — and the last — of these civilizational leaps.</p>
       </div>
     </div>
   </section>
